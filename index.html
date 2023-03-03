@@ -154,6 +154,165 @@
             
 
 <div class="post">
+    <a href="/2023/03/03/COMP310-multithreading/">
+        <h2 class="post-title">COMP310_multithreading</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/Lecture-notes/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                Lecture notes
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/3/3
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <h2 id="Multithreading"><a href="#Multithreading" class="headerlink" title="Multithreading"></a><strong>Multithreading</strong></h2><h3 id="Purpose"><a href="#Purpose" class="headerlink" title="Purpose"></a><strong>Purpose</strong></h3><p>Still use web server as an example:  </p>
+<ol>
+<li>to ensure a certain level of security(for example, to guarantee the running code on the server would not disrupt anything), we may use multiprocess since process itself ensures a segregation</li>
+<li>if security is guaranteed, multithread can be considered to its efficiency(by shared data)<br><em>Static data tend to be processed by process, dynamic by thread in server.</em></li>
+</ol>
+<h3 id="Basic-Approach-to-Multithreading"><a href="#Basic-Approach-to-Multithreading" class="headerlink" title="Basic Approach to Multithreading"></a><strong>Basic Approach to Multithreading</strong></h3><ol>
+<li>Divide “work” anibf multiple threads(based on the property of work per se)</li>
+<li>Shared data<ul>
+<li>Only <code>global variables</code> and <code>heap</code> can be shared.</li>
+<li>shared data accession by critical section</li>
+</ul>
+</li>
+</ol>
+<h3 id="Locking"><a href="#Locking" class="headerlink" title="Locking"></a><strong>Locking</strong></h3><p>For example, we may want to have a multithreading program compute the sum and products of elements in two arrays:</p>
+<pre><code class="pseudo">main()&#123;
+    int i, sum=0, prod=1
+    for(i=0;i&lt;MAX_THREADS;i++)&#123;Pthread_create(...)&#125;
+    for(i=0;i&lt;MAX_THREADS;i++)&#123;Pthread_join(...)&#125;
+    printf(sum)
+    printf(prod)
+&#125;
+
+Threadcode()&#123;
+    int i,c
+    for(i=my_min;i&lt;my_max;i++)&#123;
+        c = a[i] * b[i]
+        sum += c
+        prod *= c
+    &#125;
+&#125;
+</code></pre>
+<blockquote>
+<p><code>htop</code> can be used to check the status of the resources(CPU,memory…) </p>
+</blockquote>
+<p>We need to implement lock in thread to prevent data racing.<br>The naive way would be to implement biglock:</p>
+<pre><code class="pseudo">Threadcode()&#123;
+    int i,c
+    for(i=my_min;i&lt;my_max;i++)&#123;
+        c = a[i] * b[i]
+        pthread_mutex_lock(biglock)
+        sum += c
+        prod *= c
+        pthread_mutex_unlock(biglock)
+    &#125;
+&#125;
+</code></pre>
+<p>However, it reduces performance since <u>single lock inhibits parallelism</u>. Therefore, two approaches invented to deal with it:  </p>
+<ol>
+<li>Fine-grain locking:<ul>
+<li>Multiple locks on individual pieces of shared data</li>
+</ul>
+</li>
+<li>Privitization<ul>
+<li>Make shared data accesses into private data access</li>
+</ul>
+</li>
+</ol>
+<h4 id="Fine-Grain-Locking"><a href="#Fine-Grain-Locking" class="headerlink" title="Fine-Grain Locking"></a><strong>Fine-Grain Locking</strong></h4><pre><code class="pseudo">Threadcode()&#123;
+    int i,c
+    for(i=my_min;i&lt;my_max;i++)&#123;
+        c = a[i] * b[i]
+        pthread_mutex_lock(sumlock)
+        sum += c
+        pthread_mutex_unlock(sumlock)
+        pthread_mutex_lock(prodlock)
+        prod *= c
+        pthread_mutex_unlock(prodlock)
+    &#125;
+&#125;
+## 2 lock accesses per thread, per iteration
+</code></pre>
+<h4 id="Privitization"><a href="#Privitization" class="headerlink" title="Privitization"></a><strong>Privitization</strong></h4><h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea:"></a><strong>Idea:</strong></h5><p>For each thread define the local variables to represent the parts of the global variables; access the loop by the locals. Finally using the lock to the local variables.</p>
+<pre><code class="pseudo">Threadcode()&#123;
+    int i,c
+    local_s =0
+    local_p =1
+    for(i=my_min;i&lt;my_max;i++)&#123;
+        c = a[i] * b[i]
+        local_s += c
+        local_p *= c
+    &#125;
+        pthread_mutex_lock(sumlock)
+        sum += local_s
+        pthread_mutex_unlock(sumlock)
+        pthread_mutex_lock(prodlock)
+        prod *= local_p
+        pthread_mutex_unlock(prodlock)
+&#125;
+## 2 lock accesses per thread, in total
+</code></pre>
+<h3 id="Producer-x2F-Consumer-Problem"><a href="#Producer-x2F-Consumer-Problem" class="headerlink" title="Producer&#x2F;Consumer Problem"></a><strong>Producer&#x2F;Consumer Problem</strong></h3><p>Arises when two or more threads communicate with each other.</p>
+<h4 id="Def"><a href="#Def" class="headerlink" title="Def:"></a><strong>Def:</strong></h4><p>One shared bounded buffer with N entries. Requirements:  </p>
+<ol>
+<li>No production when N are all full(harder to deal since info may loss)</li>
+<li>No consumption when no entry is full(easy to deal)</li>
+<li>Access to the buffer is mutually exclusive(at a time only one process should be able to access the shared buffer and make changes to it)</li>
+</ol>
+<p><em>Locks cannot deal with it</em></p>
+<h4 id="Solution-Semaphores"><a href="#Solution-Semaphores" class="headerlink" title="Solution: Semaphores"></a><strong>Solution: Semaphores</strong></h4><h5 id="Single-producer-and-consumer"><a href="#Single-producer-and-consumer" class="headerlink" title="Single producer and consumer"></a><strong>Single producer and consumer</strong></h5><p>Requires 2 semaphores:</p>
+<ul>
+<li>emptyBuffer: initalize to N -&gt; N empty buffers; producer can run N times first</li>
+<li>fullBuffer: initialize to 0 -&gt; 0 full buffers; consumer can run 0 times first</li>
+</ul>
+<h5 id="Multiple-producers-and-consumers"><a href="#Multiple-producers-and-consumers" class="headerlink" title="Multiple producers and consumers"></a><strong>Multiple producers and consumers</strong></h5>
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/COMP310/" style="color: #ff7d73">
+                COMP310
+            </a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/Lecture-notes/" style="color: #ffa2c4">
+                Lecture notes
+            </a>
+        </span>
+        
+    </div>
+    <a href="/2023/03/03/COMP310-multithreading/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
     <a href="/2023/03/03/COMP310-multiprocesscom/">
         <h2 class="post-title">COMP310_Multiprocess Communication</h2>
     </a>
@@ -328,14 +487,14 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Notes/" style="color: #03a9f4">
+            <a href="/tags/Lecture-Notes/" style="color: #00bcd4">
                 Lecture Notes
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Operating-System/" style="color: #00a596">
+            <a href="/tags/Operating-System/" style="color: #ff7d73">
                 Operating System
             </a>
         </span>
@@ -384,7 +543,7 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/Markdown/" style="color: #00bcd4">
+            <a href="/tags/Markdown/" style="color: #ffa2c4">
                 Markdown
             </a>
         </span>
@@ -469,7 +628,7 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/HTML/" style="color: #03a9f4">
+            <a href="/tags/HTML/" style="color: #ffa2c4">
                 HTML
             </a>
         </span>
@@ -526,7 +685,7 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/test/" style="color: #00a596">
+            <a href="/tags/test/" style="color: #03a9f4">
                 test
             </a>
         </span>
