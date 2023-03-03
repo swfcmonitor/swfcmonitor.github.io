@@ -3,7 +3,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Aubade_Blog</title>
+        <title>COMP310_Multiprocess Communication | Aubade_Blog</title>
         <meta name="author" content="Terrance">
         <meta name="description" content="Persisting will immortalizes freedom.">
         <meta name="keywords" content="">
@@ -130,34 +130,17 @@
     </div>
 </nav>
 
-                <div id="home-head">
-    <div id="home-background" style="background-image: url(/images/bk.jfif)"></div>
-    
-    <div id="home-info" @click="homeclick">
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="info">
-            <div class="wrap">
-                <h1>Aubade_Blog</h1>
-                <h3></h3>
-                <h5>Persisting will immortalizes freedom.</h5>
-            </div>
-        </span>
+                <div class="article">
+    <div>
+        <h1>COMP310_Multiprocess Communication </h1>
     </div>
-    
-</div>
-<div id="home-posts-wrap" class="">
-    <div id="home-posts">
-        <div id="posts">
-            
-
-<div class="post">
-    <a href="/2023/03/03/COMP310-multiprocesscom/">
-        <h2 class="post-title">COMP310_Multiprocess Communication</h2>
-    </a>
-    <div class="category-and-date">
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/3/3
+        </span>
         
         <span class="category">
             <a href="/categories/Lecture-Notes-COMP310/">
@@ -168,19 +151,28 @@
             </a>
         </span>
         
-        <span class="date">
+        
+        <span class="tags">
             <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
+                <i class="fa-solid fa-tags fa-fw"></i>
             </span>
-            2023/3/3
+            
+            <span class="tag">
+                
+                <a href="/tags/Lecture-Notes/" style="color: #00a596">Lecture Notes</a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/Operating-System/" style="color: #03a9f4">Operating System</a>
+            </span>
+            
         </span>
         
-        
     </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            <h1 id="Multiprocess-Communication"><a href="#Multiprocess-Communication" class="headerlink" title="Multiprocess Communication"></a>Multiprocess Communication</h1><p><em>Some is not included.</em></p>
+    
+    <div class="content" v-pre>
+        <h1 id="Multiprocess-Communication"><a href="#Multiprocess-Communication" class="headerlink" title="Multiprocess Communication"></a>Multiprocess Communication</h1><p><em>Some is not included.</em></p>
 <h3 id="Purpose"><a href="#Purpose" class="headerlink" title="Purpose:"></a><strong>Purpose</strong>:</h3><p>Most times, the program(shell,compiler…) we have seen right now only represents one process, with the following structure:<br><code>Code, Globals, Heap, Stack, Registers, PC(Program Counter)  </code><br>However, in complicated cases, we may have one program composed of multiple processes(web server).   <em>In web server, the simplist model comprises two processes, one is used for request fetching, another is for local manipulation.</em></p>
 <p>Multiprocess is a way to implement <code>concurrency</code>. The major purpose is still to boost the efficiency for using CPU.</p>
 <h3 id="Example-of-Web-Server"><a href="#Example-of-Web-Server" class="headerlink" title="Example of Web Server"></a><strong>Example of Web Server</strong></h3><ol>
@@ -308,302 +300,13 @@ exit
 <li>rpcgen<br>tool generating remote program interface modules</li>
 </ul>
 
-            
-        </div>
-    </div>
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/Lecture-Notes/" style="color: #03a9f4">
-                Lecture Notes
-            </a>
-        </span>
-        
-        <span class="tag">
-            
-            <a href="/tags/Operating-System/" style="color: #ffa2c4">
-                Operating System
-            </a>
-        </span>
-        
-    </div>
-    <a href="/2023/03/03/COMP310-multiprocesscom/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2023/03/01/Markdown-Guide/">
-        <h2 class="post-title">Markdown Guide</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/Guide/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                Guide
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2023/3/1
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            
-            
-        </div>
-    </div>
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/Markdown/" style="color: #00bcd4">
-                Markdown
-            </a>
-        </span>
-        
-    </div>
-    <a href="/2023/03/01/Markdown-Guide/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2023/02/26/Stanford-CS142-C1-HTML/">
-        <h2 class="post-title">Stanford_CS142_W1_HTML</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/Lecture-Notes/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                Lecture Notes
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2023/2/26
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            <h1 id="CS-142-W1-1-HTML"><a href="#CS-142-W1-1-HTML" class="headerlink" title="CS 142 _ W1_1_HTML"></a>CS 142 _ W1_1_HTML</h1><p><em>This document is singly a lecture  notes for CS 142 and act as a review for basic markdown syntax.</em></p>
-<p><strong>Markup Language</strong>:<br>Include directives with content. Is an example of <code>declarative language</code>.<br>The Major purpose for using markup language can be disected into many aspects, but one use can be to focus on the content of the text per se, instead of its formation.<br><em>Two examples of markup langages: Markdown, HTML</em></p>
-<p><strong>HTML</strong>(HyperText Markup Language)<br>As noted above, HTML is a type of markup language.<br>Approach for writing HTML:</p>
-<ol>
-<li>start with contents to be displayed</li>
-<li>annotate it with tags</li>
-</ol>
-<p><strong>HTML Tags:</strong><br>HTML tags provide:  </p>
-<ol>
-<li>Meaning of text:<ul>
-<li><code>&lt;h1&gt;</code> means top-level heading</li>
-<li><code>&lt;p&gt;</code> means paragraph</li>
-<li><code>&lt;ul&gt; &lt;li&gt;</code> for unordered(bulleted) list</li>
-</ul>
-</li>
-<li>Formatting information(properties of the contents)</li>
-<li>Additional information to display(e.g.<code>&lt;img&gt;</code>)</li>
-</ol>
-<p><em>Tags nestation are supported</em></p>
-<p><strong>XHTML(XML-Based HTML)</strong><br>Difference:</p>
-<ol>
-<li>XHTML is more strict about adhering to proper syntax<ul>
-<li>do not ignore unknown tags</li>
-<li>do not carry on with syntax errors</li>
-<li>do not guess the character missing</li>
-</ul>
-</li>
-</ol>
-<p><strong>Basic Syntax of XHTML:</strong><br>Document: hierarchical collection of elements, starting with <code>&lt;html&gt;</code></p>
-<ul>
-<li>Elements: start tag, contents, end tag  <ul>
-<li>start tags can contain <em>attributes</em></li>
-</ul>
-</li>
-</ul>
-<p><a href="/2023/02/26/Stanford-CS142-C1-HTML/test_1.html" title="only for test purpose">A test html site.</a><br>&lt;–The document would be renewed in 2023&#x2F;2&#x2F;26 UTC-5–&gt;</p>
-
-            
-        </div>
-    </div>
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/HTML/" style="color: #03a9f4">
-                HTML
-            </a>
-        </span>
-        
-        <span class="tag">
-            
-            <a href="/tags/web-development/" style="color: #03a9f4">
-                web development
-            </a>
-        </span>
-        
-    </div>
-    <a href="/2023/02/26/Stanford-CS142-C1-HTML/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2023/02/25/Let-s-begin/">
-        <h2 class="post-title">Let&#39;s begin</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/test/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                test
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2023/2/25
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            <p><strong>it only represents a single test to the publishing functionality to this blog.</strong><br>LaTex Test:<br>\LaTex Basic Math Functionality<br>$$ x + y &#x3D; \sum^{\infty}_{k&#x3D;1}y^k $$</p>
-
-            
-        </div>
-    </div>
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/test/" style="color: #00a596">
-                test
-            </a>
-        </span>
-        
-    </div>
-    <a href="/2023/02/25/Let-s-begin/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2023/02/25/hello-world/">
-        <h2 class="post-title">Hello World</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2023/2/25
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre><code class="bash">$ hexo new &quot;My New Post&quot;
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre><code class="bash">$ hexo server
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre><code class="bash">$ hexo generate
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre><code class="bash">$ hexo deploy
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-            
-        </div>
-    </div>
-    <div class="post-tags">
-        
-        
-    </div>
-    <a href="/2023/02/25/hello-world/" class="go-post">阅读全文</a>
-</div>
-
-
-            <div class="page-current">
-    <div class="prev">
-        
-    </div>
-    <div class="page-index">
-        
-        <span class="current">1</span>
-        
-    </div>
-    <div class="next">
-        
-    </div>
-</div>
-
-        </div>
     </div>
     
-    <div id="home-card">
-        <div id="card-div">
-    <div class="card-style" style="width: 300px">
-        <div class="avatar">
-            <img src="/images/OIP.jpg" alt="avatar">
-        </div>
-        <div class="name">Terrance</div>
-        <div class="description">
-            <p>Honor Mathematics &amp; Honor Econ &amp; Honor CS</p>
-
-        </div>
-        
-        
-    </div>
-</div>
-
-    </div>
+    
+    
+    
+    
+    
     
 </div>
 
@@ -630,6 +333,11 @@ exit
         </div>
         <script src="/js/functions.js"></script>
 <script src="/js/particlex.js"></script>
+
+
+
+
+
 
 
     </body>
