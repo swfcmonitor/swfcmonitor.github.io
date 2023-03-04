@@ -154,6 +154,191 @@
             
 
 <div class="post">
+    <a href="/2023/03/04/COMP310-SynchroP/">
+        <h2 class="post-title">COMP310_SynchroP</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/Lecture-notes/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                Lecture notes
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/3/4
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <h3 id="Synchronization-Primitives-同步原语"><a href="#Synchronization-Primitives-同步原语" class="headerlink" title="Synchronization Primitives 同步原语"></a>Synchronization Primitives 同步原语</h3><h4 id="Concurrency"><a href="#Concurrency" class="headerlink" title="Concurrency"></a><strong>Concurrency</strong></h4><h4 id="Purpose"><a href="#Purpose" class="headerlink" title="Purpose"></a><strong>Purpose</strong></h4><p>The motivation for leading into concurrency:</p>
+<ul>
+<li>CPU trend: Same speed, multiple cores &lt;- destined by Moore’s Law</li>
+<li>Goal: write applications fully utilize many cores</li>
+</ul>
+<h5 id="Option"><a href="#Option" class="headerlink" title="Option:"></a><strong>Option:</strong></h5><ul>
+<li>Multiprocess<ul>
+<li>apps based on many communicating process</li>
+<li>communicate through message passing -&gt; no shared memeory</li>
+<li>Pros: One process crashing not affect other processes</li>
+<li>Cons: High communication overloads &amp; Expensive context switching</li>
+</ul>
+</li>
+<li>Multithread  <ul>
+<li>multiple threads in a process</li>
+<li>communicate through memory sharing(shared address space)</li>
+<li>Pros: High efficiency</li>
+<li>Cons: One crash whole crash</li>
+</ul>
+</li>
+</ul>
+<h5 id="Non-Determinism"><a href="#Non-Determinism" class="headerlink" title="Non-Determinism:"></a><strong>Non-Determinism:</strong></h5><ul>
+<li>Concurrency leads to non-deterministic results -&gt; depends on CPU scheduler<ul>
+<li>Different results with same inputs</li>
+<li>Race Conditions</li>
+</ul>
+</li>
+</ul>
+<h4 id="Thread"><a href="#Thread" class="headerlink" title="Thread"></a><strong>Thread</strong></h4><h5 id="Def"><a href="#Def" class="headerlink" title="Def"></a><strong>Def</strong></h5><p>The smallest controllable unit of the OS. The essential part of thread is data(memory) sharing.</p>
+<h5 id="Diiference-to-Process"><a href="#Diiference-to-Process" class="headerlink" title="Diiference to Process"></a><strong>Diiference to Process</strong></h5><ul>
+<li>Processes provide seperation -&gt; suitable for coarse interaction</li>
+<li>Threads do not provide seperation -&gt; suitable for tighter integration</li>
+</ul>
+<h5 id="Shared-Data"><a href="#Shared-Data" class="headerlink" title="Shared Data"></a><strong>Shared Data</strong></h5><ul>
+<li>Advantage: Many threads can read&#x2F;write it</li>
+<li>Dis: Data racing</li>
+</ul>
+<h6 id="Dara-Racing"><a href="#Dara-Racing" class="headerlink" title="Dara Racing"></a><strong>Dara Racing</strong></h6><ul>
+<li>Unwanted access to shared data</li>
+<li>result of interleaving of thread executions</li>
+<li>program must be correct for all interleavings</li>
+</ul>
+<p>The essence of data racing is from the non-determinism of concurrency.  </p>
+<h4 id="Synchronization-Primitives"><a href="#Synchronization-Primitives" class="headerlink" title="Synchronization Primitives:"></a><strong>Synchronization Primitives:</strong></h4><p><em>implemented via hardware support in kernel mode</em></p>
+<table><tr><td>Software</td><td>Hardware</td></tr>
+<tr><td><ul><li>Monitors</li><li>Semaphores</li><li>Locks(mutex)</li><li>Condition Variables</li></ul></td><td><ul><li>Loads</li><li>Stores</li><li>Test&Set</li><li>Disable Interrupts</li></ul></td></tr></table>
+
+<h5 id="Atomization-Mutual-Exclusion"><a href="#Atomization-Mutual-Exclusion" class="headerlink" title="Atomization(Mutual Exclusion)"></a><strong>Atomization(Mutual Exclusion)</strong></h5><p>The aforementioned problem generates the following basic approach to multithreading with the solution:<br><em>The core is atomization(mutual exclusion of critical section).</em> </p>
+<ol>
+<li>Divide work among multiple threads</li>
+<li>Shared data -&gt; Put shared data access in <u>critical section</u>(<strong>atomization</strong>)</li>
+</ol>
+<h6 id="Purpose-1"><a href="#Purpose-1" class="headerlink" title="Purpose:"></a><strong>Purpose:</strong></h6><p>Prevents simultaneous access to a shared resource(memory region, …);solving critical section problem.</p>
+<p>We need library support(pthreads) to achieve mutual exclusion.  </p>
+<blockquote>
+<p><strong>POSIX Thread Libraries</strong></p>
+<ul>
+<li>Thread API for C&#x2F;C++</li>
+<li>User-level library:<ul>
+<li>#include&lt;pthread.h&gt;</li>
+<li>Compile and link with <code>-pthread</code></li>
+</ul>
+</li>
+<li>Support for thread creation, termination, synchronization</li>
+</ul>
+<p>pthread_create();  pthread_exit(); pthread_join()</p>
+</blockquote>
+<blockquote>
+<p><strong>Pthread_Locks:</strong><br>##Notice that the lock itself is a shared variable<br>Pthread_mutex_lock(mutex)<br><em>If lock is held by another thread, block; otherwise, acquire the lock and proceed.</em><br><em><u>This actually means the condition of the lock is always checking. System resource is in use.</u></em><br>Pthread_mutex_unlock(mutex)<br><em>Release the lock</em></p>
+</blockquote>
+<h6 id="Deadlocks"><a href="#Deadlocks" class="headerlink" title="Deadlocks"></a><strong>Deadlocks</strong></h6><p>Threads are stuck waiting for blocked resources and no amount of retry will help.</p>
+<h5 id="Condition-Variables"><a href="#Condition-Variables" class="headerlink" title="Condition Variables"></a><strong>Condition Variables</strong></h5><p>Conditional Variable is a sychronization primitive which is a bit complex than lock.</p>
+<ul>
+<li>Used when thread A needs to wait for an event done by thread B</li>
+<li>A waits until the certain condition is true<ol>
+<li>Test the condition</li>
+<li>If the condition is not true, call<br> <code>pthread_cond_wait()</code> -&gt; causes A be blocked until the condition is true</li>
+</ol>
+</li>
+<li>At some point B makes the condition true<ol>
+<li>Then B calls <code>pthread_cond_signal()</code> -&gt;unblocks A</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p><em>Condition variable is a shared data, so introduce lock(mutex) here.</em></p>
+</blockquote>
+<blockquote>
+<p><strong>Conditional Variables Interface</strong><br>pthread_cond_init(pthread_cond_t *cv, pthread_condattr_t *cattr)  </p>
+<ul>
+<li>Initialize the conditional variable, cattr can be null</li>
+</ul>
+<p>pthread_cond_wait(pthread_cond_t *cv, pthread_mutex_t *mutex)</p>
+<ul>
+<li>Block thread until condition is treu, and automatically unblock mutex</li>
+</ul>
+<p>pthread_cond_signal(pthread_cond_t *cv)</p>
+<ul>
+<li>Unblock one thread blocked by the conditional variable at random</li>
+</ul>
+<p>pthread_cond_broadcast(pthread_cond_t *cv)</p>
+<ul>
+<li>Unblock all threads blocked by the conditional variable</li>
+</ul>
+</blockquote>
+<h6 id="Advantage"><a href="#Advantage" class="headerlink" title="Advantage"></a><strong>Advantage</strong></h6><p>A waits(sleeps) until a certain condition is true; CPU is not busy(not many resources is used).</p>
+<h6 id="Two-Problems-for-Naive-Conditional-Variable-and-the-Solution"><a href="#Two-Problems-for-Naive-Conditional-Variable-and-the-Solution" class="headerlink" title="Two Problems for Naive Conditional Variable and the Solution"></a><strong>Two Problems for Naive Conditional Variable and the Solution</strong></h6><p>Check the lecture.</p>
+<h4 id="Semaphores"><a href="#Semaphores" class="headerlink" title="Semaphores"></a><strong>Semaphores</strong></h4><p><em>#include&lt;semaphore.h&gt;</em><br>Semaphore is a shared, non-negative counter with two primary operations: wait(attempts to decrement the counter; blocks when the counter is 0),post&#x2F;signal(attempts to increment the counter).  </p>
+<blockquote>
+<p>Notice that the increment and decrement in semaphore are atomic.  </p>
+</blockquote>
+<blockquote>
+<p>Semaphore value can be initialized upon creation to a positive value, or 0.</p>
+</blockquote>
+<h5 id="Uses"><a href="#Uses" class="headerlink" title="Uses"></a><strong>Uses</strong></h5><ul>
+<li>Mutual exclusion:<br>A semaphore with its counter initialized to 1 is equivalent to a lock.</li>
+<li>Bound the currency<br>Initialized to a larger value to bound the # of threads out of N to proceed.</li>
+<li>Consumer-Producer Problem</li>
+</ul>
+<h5 id="interface"><a href="#interface" class="headerlink" title="interface"></a><strong>interface</strong></h5><blockquote>
+<p>int sem_init(sem_t *sem,int pshared, unsigned value)<br>int sem_post(sem_t *sem)<br>int sem_wait(sem_t *sem)  </p>
+</blockquote>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/COMP310/" style="color: #00bcd4">
+                COMP310
+            </a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/Lecture-notes/" style="color: #ff7d73">
+                Lecture notes
+            </a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/OS/" style="color: #ff7d73">
+                OS
+            </a>
+        </span>
+        
+    </div>
+    <a href="/2023/03/04/COMP310-SynchroP/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
     <a href="/2023/03/03/COMP310-multithreading/">
         <h2 class="post-title">COMP310_multithreading</h2>
     </a>
@@ -296,14 +481,14 @@ Threadcode()&#123;
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #ff7d73">
+            <a href="/tags/COMP310/" style="color: #03a9f4">
                 COMP310
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Lecture-notes/" style="color: #ffa2c4">
+            <a href="/tags/Lecture-notes/" style="color: #00a596">
                 Lecture notes
             </a>
         </span>
@@ -494,7 +679,7 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/Operating-System/" style="color: #ff7d73">
+            <a href="/tags/Operating-System/" style="color: #ffa2c4">
                 Operating System
             </a>
         </span>
@@ -628,7 +813,7 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/HTML/" style="color: #ffa2c4">
+            <a href="/tags/HTML/" style="color: #ff7d73">
                 HTML
             </a>
         </span>
@@ -685,7 +870,7 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/test/" style="color: #03a9f4">
+            <a href="/tags/test/" style="color: #00bcd4">
                 test
             </a>
         </span>
