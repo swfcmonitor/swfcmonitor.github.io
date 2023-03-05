@@ -250,7 +250,38 @@
 <blockquote>
 <p>The problem of base and bounds is there may be huge “free space” occupied by the process in the memory taht can’t be reallocated.<br>One solution is to implement by segmentation.</p>
 </blockquote>
-<h5 id="Segmentation"><a href="#Segmentation" class="headerlink" title="Segmentation"></a><strong>Segmentation</strong></h5><h2 id="In-stead-of-treat-one-program-as-a-chunk-in-address-space-we-segmented-it-in-three-parts-Code-Heap-Stack-which-can-grow-dynamically-gt-The-segmentation-has-many-ways-the-above-3-parts-is-only-one-of-them-gt-Can-be-treated-as-multiple-base-and-bounds-Virtual-Address-Space-Two-dimensional-space-with-set-of-segements-and-each-segment-‘i’-is-linear-from-0-to-MAX-i-Set-of-segments-each-linear-gt-The-order-of-the-segments-in-physical-space-has-no-need-to-be-the-same-as-in-virtual-address-space-Virtual-Address-Structure-Check-LectureSegment-Offset–-gt-Number-of-segment-bits-offset-bits-x3D-virtual-memory-address-bits-MMU-Segment-table-Indexed-by-segment-number-contains-base-limit-pair-base-physical-address-of-segment-in-memory-where-the-segment-starts-limit-length-of-the-segment-Pointer-to-segment-table-in-memory-length-of-segment-table-gt-notice-a-recursive-use-in-MMU"><a href="#In-stead-of-treat-one-program-as-a-chunk-in-address-space-we-segmented-it-in-three-parts-Code-Heap-Stack-which-can-grow-dynamically-gt-The-segmentation-has-many-ways-the-above-3-parts-is-only-one-of-them-gt-Can-be-treated-as-multiple-base-and-bounds-Virtual-Address-Space-Two-dimensional-space-with-set-of-segements-and-each-segment-‘i’-is-linear-from-0-to-MAX-i-Set-of-segments-each-linear-gt-The-order-of-the-segments-in-physical-space-has-no-need-to-be-the-same-as-in-virtual-address-space-Virtual-Address-Structure-Check-LectureSegment-Offset–-gt-Number-of-segment-bits-offset-bits-x3D-virtual-memory-address-bits-MMU-Segment-table-Indexed-by-segment-number-contains-base-limit-pair-base-physical-address-of-segment-in-memory-where-the-segment-starts-limit-length-of-the-segment-Pointer-to-segment-table-in-memory-length-of-segment-table-gt-notice-a-recursive-use-in-MMU" class="headerlink" title="In stead of treat one program as a chunk in address space, we segmented it in three parts: Code, Heap, Stack which can grow dynamically.&gt; The segmentation has many ways, the above 3 parts is only one of them.&gt;Can be treated as multiple base and bounds.* Virtual Address Space  Two-dimensional space with set of segements and each segment ‘i’ is linear from 0 to MAX(i)* Set of segments, each linear&gt;The order of the segments in physical space has no need to be the same as in virtual address space.* Virtual Address (Structure)Check LectureSegment + Offset–&gt; Number of segment bits + offset bits &#x3D; virtual memory address bits* MMU  * Segment table    Indexed by segment number    contains (base,limit pair)    * base: physical address of segment in memory(where the segment starts)    * limit: length of the segment  * Pointer to segment table in memory  * length of segment table&gt;notice a recursive use in MMU"></a>In stead of treat one program as a chunk in address space, we segmented it in <strong>three parts: Code, Heap, Stack</strong> which can grow dynamically.<br>&gt; The segmentation has many ways, the above 3 parts is only one of them.<br>&gt;<br>Can be treated as multiple base and bounds.<br>* Virtual Address Space<br>  Two-dimensional space with set of segements and each segment ‘i’ is linear from 0 to MAX(i)<br>* Set of segments, each linear<br>&gt;The order of the segments in physical space has no need to be the same as in virtual address space.<br>* Virtual Address (Structure)<br><em>Check Lecture</em><br><strong>Segment + Offset</strong><br>–&gt; Number of <strong>segment bits + offset bits</strong> &#x3D; <strong>virtual memory address bits</strong><br>* MMU<br>  * Segment table<br>    Indexed by segment number<br>    contains <strong>(base,limit pair)</strong><br>    * base: physical address of segment in memory(where the segment starts)<br>    * limit: length of the segment<br>  * Pointer to segment table in memory<br>  * length of segment table<br>&gt;notice a recursive use in MMU</h2><blockquote>
+<h5 id="Segmentation"><a href="#Segmentation" class="headerlink" title="Segmentation"></a><strong>Segmentation</strong></h5><p>In stead of treat one program as a chunk in address space, we segmented it in <strong>three parts: Code, Heap, Stack</strong> which can grow dynamically.</p>
+<blockquote>
+<p>The segmentation has many ways, the above 3 parts is only one of them.</p>
+</blockquote>
+<p>Can be treated as multiple base and bounds.</p>
+<ul>
+<li><p>Virtual Address Space<br>Two-dimensional space with set of segements and each segment ‘i’ is linear from 0 to MAX(i)</p>
+</li>
+<li><p>Set of segments, each linear</p>
+<blockquote>
+<p>The order of the segments in physical space has no need to be the same as in virtual address space.</p>
+</blockquote>
+</li>
+<li><p>Virtual Address (Structure)<br><em>Check Lecture</em><br><strong>Segment + Offset</strong><br>–&gt; Number of <strong>segment bits + offset bits</strong> &#x3D; <strong>virtual memory address bits</strong></p>
+</li>
+<li><p>MMU</p>
+<ul>
+<li>Segment table<br>Indexed by segment number<br>contains <strong>(base,limit pair)</strong><ul>
+<li>base: physical address of segment in memory(where the segment starts)</li>
+<li>limit: length of the segment</li>
+</ul>
+</li>
+<li>Pointer to segment table in memory</li>
+<li>length of segment table<blockquote>
+<p>notice a recursive use in MMU</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<blockquote>
 <p>NOTICE: The info of mapping is all stored in MMU.</p>
 </blockquote>
 
@@ -266,7 +297,7 @@
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #ffa2c4">
+            <a href="/tags/COMP310/" style="color: #03a9f4">
                 COMP310
             </a>
         </span>
@@ -452,14 +483,14 @@
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #ff7d73">
+            <a href="/tags/COMP310/" style="color: #00bcd4">
                 COMP310
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Notes/" style="color: #ff7d73">
+            <a href="/tags/Lecture-Notes/" style="color: #ffa2c4">
                 Lecture Notes
             </a>
         </span>
@@ -621,7 +652,7 @@ Threadcode()&#123;
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Notes/" style="color: #00a596">
+            <a href="/tags/Lecture-Notes/" style="color: #ffa2c4">
                 Lecture Notes
             </a>
         </span>
@@ -815,14 +846,14 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #03a9f4">
+            <a href="/tags/COMP310/" style="color: #00a596">
                 COMP310
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Notes/" style="color: #ff7d73">
+            <a href="/tags/Lecture-Notes/" style="color: #03a9f4">
                 Lecture Notes
             </a>
         </span>
@@ -871,7 +902,7 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/Markdown/" style="color: #00a596">
+            <a href="/tags/Markdown/" style="color: #ff7d73">
                 Markdown
             </a>
         </span>
@@ -956,7 +987,7 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/HTML/" style="color: #03a9f4">
+            <a href="/tags/HTML/" style="color: #ff7d73">
                 HTML
             </a>
         </span>
@@ -1013,7 +1044,7 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/test/" style="color: #00bcd4">
+            <a href="/tags/test/" style="color: #00a596">
                 test
             </a>
         </span>
