@@ -159,17 +159,17 @@
             
             <span class="tag">
                 
-                <a href="/tags/COMP310/" style="color: #ffa2c4">COMP310</a>
+                <a href="/tags/COMP310/" style="color: #00a596">COMP310</a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/OS/" style="color: #00a596">OS</a>
+                <a href="/tags/OS/" style="color: #03a9f4">OS</a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/Lecture-Notes/" style="color: #00a596">Lecture Notes</a>
+                <a href="/tags/Lecture-Notes/" style="color: #ff7d73">Lecture Notes</a>
             </span>
             
         </span>
@@ -299,6 +299,14 @@
 <h5 id="interface"><a href="#interface" class="headerlink" title="interface"></a><strong>interface</strong></h5><blockquote>
 <p>int sem_init(sem_t *sem,int pshared, unsigned value)<br>int sem_post(sem_t *sem)<br>int sem_wait(sem_t *sem)  </p>
 </blockquote>
+<hr>
+<h4 id="Hardware-Implementation-of-synchronization"><a href="#Hardware-Implementation-of-synchronization" class="headerlink" title="Hardware Implementation of synchronization"></a><strong>Hardware Implementation of synchronization</strong></h4><h5 id="Problem-Specifications"><a href="#Problem-Specifications" class="headerlink" title="Problem Specifications"></a><strong>Problem Specifications</strong></h5><ul>
+<li>Safety(no tresspass of protected space)</li>
+<li>Liveness(achieved final goal)</li>
+</ul>
+<h5 id="Lock-Implementation"><a href="#Lock-Implementation" class="headerlink" title="Lock Implementation"></a><strong>Lock Implementation</strong></h5><p>Check lecture for detailed notes.  </p>
+<h6 id="Store-amp-Load"><a href="#Store-amp-Load" class="headerlink" title="Store &amp; Load"></a><strong>Store &amp; Load</strong></h6><p>Treat store as a signaling method to indicate the running status of threads; using load to determine if run or not based on status.<br><em>Disadvantage: busy_waiting</em></p>
+<h6 id="Disable-Interrupts"><a href="#Disable-Interrupts" class="headerlink" title="Disable Interrupts"></a><strong>Disable Interrupts</strong></h6><p>Thread uses the syscall of LOCK to disable the interrupter in kernel, renable interrupter after finishing.<br><em>Adv: Compared to store&amp;load, thread can be hypnotized</em></p>
 
     </div>
     

@@ -159,12 +159,12 @@
             
             <span class="tag">
                 
-                <a href="/tags/Lecture-Notes/" style="color: #ffa2c4">Lecture Notes</a>
+                <a href="/tags/Lecture-Notes/" style="color: #00a596">Lecture Notes</a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/Operating-System/" style="color: #ffa2c4">Operating System</a>
+                <a href="/tags/Operating-System/" style="color: #03a9f4">Operating System</a>
             </span>
             
         </span>
@@ -299,14 +299,24 @@ exit
 </li>
 <li>rpcgen<br>tool generating remote program interface modules</li>
 </ul>
-<h3 id="IPC-x2F-LPC-x2F-RPC"><a href="#IPC-x2F-LPC-x2F-RPC" class="headerlink" title="IPC&#x2F;LPC&#x2F;RPC"></a>IPC&#x2F;LPC&#x2F;RPC</h3><p>Reference: <a target="_blank" rel="noopener" href="https://blog.csdn.net/Cmm_CSDN/article/details/86138330">https://blog.csdn.net/Cmm_CSDN/article/details/86138330</a></p>
-<p>进程间通信（IPC，Inter-Process Communication）：<br>指至少两个进程或线程间传送数据或信号的一些技术或方法。进程是计算机系统分配资源的最小单位。每个进程都有自己的一部分独立的系统资源，彼此是隔离的。为了能使不同的进程互相访问资源并进行协调工作，才有了进程间通信。这些进程可以运行在同一计算机上或网络连接的不同计算机上。 进程间通信技术包括消息传递、同步、共享内存和远程过程调用。 IPC是一种标准的Unix通信机制。</p>
-<p>有两种类型的进程间通信（IPC）：  </p>
+<h3 id="IPC-x2F-LPC-x2F-RPC"><a href="#IPC-x2F-LPC-x2F-RPC" class="headerlink" title="IPC&#x2F;LPC&#x2F;RPC"></a>IPC&#x2F;LPC&#x2F;RPC</h3><p>Reference: <a target="_blank" rel="noopener" href="https://blog.csdn.net/Cmm_CSDN/article/details/86138330">https://blog.csdn.net/Cmm_CSDN/article/details/86138330</a><br><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1690556">https://cloud.tencent.com/developer/article/1690556</a></p>
+<p>进程通信：</p>
+<p>每个进程各自有不同的用户地址空间,<strong>任何一个进程的全局变量在另一个进程中都看不到</strong>，所以进程之间要<strong>交换数据必须通过内核,在内核中开辟一块缓冲区,进程A把数据从用户空间拷到内核缓冲区,进程B再从内核缓冲区把数据读走,内核提供的这种机制称为进程间通信。</strong></p>
+<p>进程间通信（IPC，Inter-Process Communication）：<br><strong>IPC（进程间通信）是指在操作系统中，不同进程之间进行通信和同步的机制。</strong><br>特指至少两个进程间传送数据或信号的一些技术或方法。进程是操作系统分配资源的最小单位。每个进程都有自己的一部分独立的系统资源，彼此是隔离的。<strong>为了能使不同的进程互相访问资源并进行协调工作</strong>，才有了进程间通信。<strong>这些进程可以运行在同一计算机上或网络连接的不同计算机上</strong>。进程间通信技术包括消息传递、同步、共享内存和远程过程调用。 IPC是一种标准的Unix通信机制。</p>
+<p>有三种主要类型的进程间通信（IPC）：  </p>
 <ol>
-<li>本地过程调用（LPC  Local Procedure Call）：<br>LPC用在多任务操作系统中，使得同时运行的任务能互相会话。这些任务共享内存空间使任务同步和互相发送信息。</li>
+<li>Message passing<br>消息传递（Message Passing）是一种进程间通信（IPC）机制，它允许进程在不共享相同地址空间的情况下进行通信和同步。它通过发送和接收消息来实现。</li>
 <li>远程过程调用（RPC  Reomote Procedure Call）：<br>特指一种隐藏了过程调用时实际通信细节的IPC方法。客户端将调用一个本地方法，而这个本地方法则是负责透明的与远程服务端进行过程间通信。这个本地方法会讲相关参数顺序打包到一个消息中，然后把这个消息发送给服务端提供的方法，服务端的方法会从消息中解出序列化发出来的参数，然后执行，最后仍以同样的方式将方法的返回值发送给客户端</li>
+<li>共享内存</li>
 </ol>
-<p> LPC和RPC都属于远程同步过程调用，远程的意思是指跨越进程边界进行调用，包括本机进程间调用和跨越机器边界的调用。本来只需要一个RPC就足够了，它同时可用于进行本机调用和网络调用，但由于网络调用的复杂性，微软发明了一套只用于本机跨进程调用的机制（专利产品）就是LPC。由于LPC不涉及网络控制，因此大大简化了远程调用的流程，也提高了调用效率，当RPC用于网络调用时，RPC还是RPC，当RPC用于本机调用时，实际上执行的是LPC，系统自动判断的。LPC在操作系统中无处不在，很多API都使用了LPC，尤其是那些需要在内核态和用户态之间切换的调用全部使用了LPC。</p>
+<p>RPC和MP：<br>本质上，RPC是基于message passing基础之上衍生出来的。这两者之间最核心的区别在于RPC的适用点主要是用于远程过程或函数调用；因此，在消除RPC的函数或过程调用功能后，RPC便和message passing没有本质区别。</p>
+<p>LPC：<br>LPC（本地过程调用）是<strong>Windows操作系统中的</strong>一种消息传递机制，用于<strong>同一台计算机</strong>上的两个进程之间的通信。它类似于广泛使用的标准远程过程调用（RPC）机制，但<strong>针对Windows进行了优化</strong>。</p>
+<p>LPC与消息传递之间的区别：  </p>
+<ol>
+<li>应用范围：LPC仅用于Windows操作系统中，而消息传递是一种通用的IPC机制。</li>
+<li>优化：LPC针对Windows进行了优化，以提高在同一台计算机上的两个进程之间进行通信的效率。</li>
+<li>使用方式：LPC不直接通过Windows API提供，而是作为仅供Windows操作系统组件使用的内部机制。而消息传递则可以通过多种编程语言和平台提供的API直接使用。</li>
+</ol>
 
     </div>
     
