@@ -159,12 +159,12 @@
             
             <span class="tag">
                 
-                <a href="/tags/COMP310/" style="color: #ff7d73">COMP310</a>
+                <a href="/tags/COMP310/" style="color: #00a596">COMP310</a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/Lecture-notes/" style="color: #03a9f4">Lecture notes</a>
+                <a href="/tags/Lecture-notes/" style="color: #ff7d73">Lecture notes</a>
             </span>
             
         </span>
@@ -175,10 +175,11 @@
         <h2 id="Multithreading"><a href="#Multithreading" class="headerlink" title="Multithreading"></a><strong>Multithreading</strong></h2><h3 id="Purpose"><a href="#Purpose" class="headerlink" title="Purpose"></a><strong>Purpose</strong></h3><p>Still use web server as an example:  </p>
 <ol>
 <li>to ensure a certain level of security(for example, to guarantee the running code on the server would not disrupt anything), we may use multiprocess since process itself ensures a segregation</li>
-<li>if security is guaranteed, multithread can be considered to its efficiency(by shared data)<br><em>Static data tend to be processed by process, dynamic by thread in server.</em></li>
+<li>if security is guaranteed, multithread can be considered to its efficiency(by shared data)</li>
 </ol>
+<p><em>Static data tend to be processed by thread, dynamic by process in server.</em></p>
 <h3 id="Basic-Approach-to-Multithreading"><a href="#Basic-Approach-to-Multithreading" class="headerlink" title="Basic Approach to Multithreading"></a><strong>Basic Approach to Multithreading</strong></h3><ol>
-<li>Divide “work” anibf multiple threads(based on the property of work per se)</li>
+<li>Divide “work” among multiple threads(based on the property of work per se)</li>
 <li>Shared data<ul>
 <li>Only <code>global variables</code> and <code>heap</code> can be shared.</li>
 <li>shared data accession by critical section</li>
@@ -270,12 +271,14 @@ Threadcode()&#123;
 <li>Access to the buffer is mutually exclusive(at a time only one process should be able to access the shared buffer and make changes to it)</li>
 </ol>
 <p><em>Locks cannot deal with it</em></p>
-<h4 id="Solution-Semaphores"><a href="#Solution-Semaphores" class="headerlink" title="Solution: Semaphores"></a><strong>Solution: Semaphores</strong></h4><h5 id="Single-producer-and-consumer"><a href="#Single-producer-and-consumer" class="headerlink" title="Single producer and consumer"></a><strong>Single producer and consumer</strong></h5><p>Requires 2 semaphores:</p>
+<h4 id="Solution-Semaphores"><a href="#Solution-Semaphores" class="headerlink" title="Solution: Semaphores"></a><strong>Solution: Semaphores</strong></h4><p><em>check the lecture</em></p>
+<h5 id="Single-producer-and-consumer"><a href="#Single-producer-and-consumer" class="headerlink" title="Single producer and consumer"></a><strong>Single producer and consumer</strong></h5><p>Requires 2 semaphores:</p>
 <ul>
 <li>emptyBuffer: initalize to N -&gt; N empty buffers; producer can run N times first</li>
 <li>fullBuffer: initialize to 0 -&gt; 0 full buffers; consumer can run 0 times first</li>
 </ul>
-<h5 id="Multiple-producers-and-consumers"><a href="#Multiple-producers-and-consumers" class="headerlink" title="Multiple producers and consumers"></a><strong>Multiple producers and consumers</strong></h5>
+<h5 id="Multiple-producers-and-consumers"><a href="#Multiple-producers-and-consumers" class="headerlink" title="Multiple producers and consumers"></a><strong>Multiple producers and consumers</strong></h5><hr>
+
     </div>
     
     

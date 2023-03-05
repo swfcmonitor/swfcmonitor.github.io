@@ -154,6 +154,135 @@
             
 
 <div class="post">
+    <a href="/2023/03/05/COMP310-MemoryManagement-VM/">
+        <h2 class="post-title">COMP310_MemoryManagement_VM</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/Lecture-Notes/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                Lecture Notes
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/3/5
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <h3 id="Memory-Management-Virtual-Memory"><a href="#Memory-Management-Virtual-Memory" class="headerlink" title="Memory Management: Virtual Memory"></a>Memory Management: Virtual Memory</h3><p>The core conception in memory management is of <strong>address space mapping</strong>.<br>Difference between physical memory and virtual one is: the virtual must be continuous but physical can be fragmental.</p>
+<h4 id="Dreamy-Memory"><a href="#Dreamy-Memory" class="headerlink" title="Dreamy Memory"></a><strong>Dreamy Memory</strong></h4><p>The OS tries to make an illusion of using memory of the following properties(desired): <code> private, infinitely large, infinitely fast, nonvolatile, cheap memory</code>.</p>
+<h4 id="Memory-Hierarchy"><a href="#Memory-Hierarchy" class="headerlink" title="Memory Hierarchy"></a><strong>Memory Hierarchy</strong></h4><p>However, in real world, the memory follows the hierarchy:</p>
+<table>
+<tr><th colspan="5"><b>Faster access from left to right, higher price from left to right</b></th></tr>
+<tr><td>Registers(1 cycle)</td>
+<td>Cache(~10 cycles)</td>
+<td>Main Memory(~100 cycles)</td></td>
+<td>Flash Disk(~1M cycles)</td>
+<td>Traditional Disk(~10M cycles)</td>
+</tr>
+<tr><td colspan="3" align="center">Primary Storage</td></tr><tr><td colspan="2" align="center">On CPU</td></tr>
+<tr><td colspan="2" align="center">Not cared by OS</td><td colspan="3" align="center">cared by OS(OS memory management)</td></tr>
+</table>
+
+<p><em>Cycle here can be interpreted as nano-second(a speed measurement)</em></p>
+<h4 id="Goals-of-OS-Memory-Management"><a href="#Goals-of-OS-Memory-Management" class="headerlink" title="Goals of OS Memory Management"></a><strong>Goals of OS Memory Management</strong></h4><p><em>Every access to memory is in virtual instead of physical one, due to the virtual <strong>mapping</strong> by OS.</em></p>
+<ol>
+<li>Main memory allocation<ul>
+<li>location of kernel in address space</li>
+<li>what memory to allocate processes</li>
+<li>how many processes to allow</li>
+</ul>
+</li>
+<li>Protection(Segeregation)<ul>
+<li>no corruption to OS and other processes</li>
+<li>Privacy: can’t read data from other processes</li>
+</ul>
+</li>
+<li>Transperancy<ul>
+<li>Illusion of private memory for each process</li>
+</ul>
+</li>
+</ol>
+<h4 id="Protection"><a href="#Protection" class="headerlink" title="Protection"></a><strong>Protection</strong></h4><p>Protection to be leaded to prevent trespassing access to memory space.<br>The general idea is to add a <strong>check</strong> in the course of accession.</p>
+<blockquote>
+<p>The <strong>check</strong> is a hardware device (<strong>MMU</strong> Memory Management Unit).</p>
+</blockquote>
+<h4 id="Transparency"><a href="#Transparency" class="headerlink" title="Transparency"></a><strong>Transparency</strong></h4><p>Essence is to make sure the running of process won’t cause confliction.(no worry of actual running space)</p>
+<h4 id="Main-Memory-Allocation"><a href="#Main-Memory-Allocation" class="headerlink" title="Main Memory Allocation"></a><strong>Main Memory Allocation</strong></h4><h5 id="Where-to-allocate-the-kernel"><a href="#Where-to-allocate-the-kernel" class="headerlink" title="Where to allocate the kernel?"></a>Where to allocate the kernel?</h5><p>In the low memory address. The reason is the <strong>interrupt vectors</strong>(the address mapping of hardware device of transferring between user and kernel mode) are in the low memory.</p>
+<h5 id="Physical-and-Virtual-Memory"><a href="#Physical-and-Virtual-Memory" class="headerlink" title="Physical and Virtual Memory"></a><strong>Physical and Virtual Memory</strong></h5><p>The early days OS runs only single process at a time which is trusted so no virtual(logical) memory is needed; the process directly access the physical memory.<br>However, if the <u>process is malicious(tresspass into the kernel)</u> or there <u>are multiple processes runs at the sam time</u>, the model won’t work. Thus, logical(virtual) memory is needed.</p>
+<ul>
+<li>Virtual&#x2F;logical address space &#x3D; what the program thinks is its memory</li>
+<li>Physical address space &#x3D; actually is its memory(residing physically)</li>
+</ul>
+<p>CPU(process) –(<strong>generates virtual address space</strong>)–&gt; MAP(MMU) –(Transfer)–&gt; Memory(Physical Address)</p>
+<h5 id="Mapping-Scheme"><a href="#Mapping-Scheme" class="headerlink" title="Mapping Scheme"></a><strong>Mapping Scheme</strong></h5><p><strong>Classification</strong></p>
+<ul>
+<li>Base and Bounds</li>
+<li>Segmentation</li>
+<li>Paging</li>
+</ul>
+<p>For each scheme, we need to understand: <code>physical address space, virtual address space, virtual address, MMU.</code></p>
+<h6 id="Base-and-Bounds"><a href="#Base-and-Bounds" class="headerlink" title="Base and Bounds"></a><strong>Base and Bounds</strong></h6><ul>
+<li>Virtual Address Space<br>Linear address space: from 0 to MAX  </li>
+<li>Physical Address Space<br>Linear address space: from BASE to BOUNDS &#x3D; BASE + MAX<br>MMU</li>
+<li>MMU<br>MMU check <strong>relocation register(holds the base value)</strong> and <strong>limit register(holds the bounds value)</strong>. </li>
+<li>Free Space Distribution<br>OS will allocate the new process to the <strong>holes(space which is free)</strong>.<br><em>Free list : A list of the range of the physical memory not in use.</em><ul>
+<li>Method<ul>
+<li>Take first hole bigger than requested</li>
+<li>The smallest hole bigger than requested</li>
+<li>The largest hole -&gt; tries to eliminate many unusable smallest holes</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>The problem of base and bounds is there may be huge “free space” occupied by the process in the memory taht can’t be reallocated.<br>One solution is to implement by segmentation.</p>
+</blockquote>
+<h5 id="Segmentation"><a href="#Segmentation" class="headerlink" title="Segmentation"></a><strong>Segmentation</strong></h5><h2 id="In-stead-of-treat-one-program-as-a-chunk-in-address-space-we-segmented-it-in-three-parts-Code-Heap-Stack-which-can-grow-dynamically-gt-The-segmentation-has-many-ways-the-above-3-parts-is-only-one-of-them-gt-Can-be-treated-as-multiple-base-and-bounds-Virtual-Address-Space-Two-dimensional-space-with-set-of-segements-and-each-segment-‘i’-is-linear-from-0-to-MAX-i-Set-of-segments-each-linear-gt-The-order-of-the-segments-in-physical-space-has-no-need-to-be-the-same-as-in-virtual-address-space-Virtual-Address-Structure-Check-LectureSegment-Offset–-gt-Number-of-segment-bits-offset-bits-x3D-virtual-memory-address-bits-MMU-Segment-table-Indexed-by-segment-number-contains-base-limit-pair-base-physical-address-of-segment-in-memory-where-the-segment-starts-limit-length-of-the-segment-Pointer-to-segment-table-in-memory-length-of-segment-table-gt-notice-a-recursive-use-in-MMU"><a href="#In-stead-of-treat-one-program-as-a-chunk-in-address-space-we-segmented-it-in-three-parts-Code-Heap-Stack-which-can-grow-dynamically-gt-The-segmentation-has-many-ways-the-above-3-parts-is-only-one-of-them-gt-Can-be-treated-as-multiple-base-and-bounds-Virtual-Address-Space-Two-dimensional-space-with-set-of-segements-and-each-segment-‘i’-is-linear-from-0-to-MAX-i-Set-of-segments-each-linear-gt-The-order-of-the-segments-in-physical-space-has-no-need-to-be-the-same-as-in-virtual-address-space-Virtual-Address-Structure-Check-LectureSegment-Offset–-gt-Number-of-segment-bits-offset-bits-x3D-virtual-memory-address-bits-MMU-Segment-table-Indexed-by-segment-number-contains-base-limit-pair-base-physical-address-of-segment-in-memory-where-the-segment-starts-limit-length-of-the-segment-Pointer-to-segment-table-in-memory-length-of-segment-table-gt-notice-a-recursive-use-in-MMU" class="headerlink" title="In stead of treat one program as a chunk in address space, we segmented it in three parts: Code, Heap, Stack which can grow dynamically.&gt; The segmentation has many ways, the above 3 parts is only one of them.&gt;Can be treated as multiple base and bounds.* Virtual Address Space  Two-dimensional space with set of segements and each segment ‘i’ is linear from 0 to MAX(i)* Set of segments, each linear&gt;The order of the segments in physical space has no need to be the same as in virtual address space.* Virtual Address (Structure)Check LectureSegment + Offset–&gt; Number of segment bits + offset bits &#x3D; virtual memory address bits* MMU  * Segment table    Indexed by segment number    contains (base,limit pair)    * base: physical address of segment in memory(where the segment starts)    * limit: length of the segment  * Pointer to segment table in memory  * length of segment table&gt;notice a recursive use in MMU"></a>In stead of treat one program as a chunk in address space, we segmented it in <strong>three parts: Code, Heap, Stack</strong> which can grow dynamically.<br>&gt; The segmentation has many ways, the above 3 parts is only one of them.<br>&gt;<br>Can be treated as multiple base and bounds.<br>* Virtual Address Space<br>  Two-dimensional space with set of segements and each segment ‘i’ is linear from 0 to MAX(i)<br>* Set of segments, each linear<br>&gt;The order of the segments in physical space has no need to be the same as in virtual address space.<br>* Virtual Address (Structure)<br><em>Check Lecture</em><br><strong>Segment + Offset</strong><br>–&gt; Number of <strong>segment bits + offset bits</strong> &#x3D; <strong>virtual memory address bits</strong><br>* MMU<br>  * Segment table<br>    Indexed by segment number<br>    contains <strong>(base,limit pair)</strong><br>    * base: physical address of segment in memory(where the segment starts)<br>    * limit: length of the segment<br>  * Pointer to segment table in memory<br>  * length of segment table<br>&gt;notice a recursive use in MMU</h2><blockquote>
+<p>NOTICE: The info of mapping is all stored in MMU.</p>
+</blockquote>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/COMP310/" style="color: #00bcd4">
+                COMP310
+            </a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/Lecture-Notes/" style="color: #00a596">
+                Lecture Notes
+            </a>
+        </span>
+        
+    </div>
+    <a href="/2023/03/05/COMP310-MemoryManagement-VM/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
     <a href="/2023/03/04/COMP310-SynchroP/">
         <h2 class="post-title">COMP310_SynchroP</h2>
     </a>
@@ -209,7 +338,7 @@
 </li>
 </ul>
 <h4 id="Thread"><a href="#Thread" class="headerlink" title="Thread"></a><strong>Thread</strong></h4><h5 id="Def"><a href="#Def" class="headerlink" title="Def"></a><strong>Def</strong></h5><p>The smallest controllable unit of the OS. The essential part of thread is data(memory) sharing.</p>
-<h5 id="Diiference-to-Process"><a href="#Diiference-to-Process" class="headerlink" title="Diiference to Process"></a><strong>Diiference to Process</strong></h5><ul>
+<h5 id="Difference-to-Process"><a href="#Difference-to-Process" class="headerlink" title="Difference to Process"></a><strong>Difference to Process</strong></h5><ul>
 <li>Processes provide seperation -&gt; suitable for coarse interaction</li>
 <li>Threads do not provide seperation -&gt; suitable for tighter integration</li>
 </ul>
@@ -222,7 +351,7 @@
 <li>result of interleaving of thread executions</li>
 <li>program must be correct for all interleavings</li>
 </ul>
-<p>The essence of data racing is from the non-determinism of concurrency.  </p>
+<p>Data racing is one of the major causes of non-deterministicity of concurrency.  </p>
 <h4 id="Synchronization-Primitives"><a href="#Synchronization-Primitives" class="headerlink" title="Synchronization Primitives:"></a><strong>Synchronization Primitives:</strong></h4><p><em>implemented via hardware support in kernel mode</em></p>
 <table><tr><td>Software</td><td>Hardware</td></tr>
 <tr><td><ul><li>Monitors</li><li>Semaphores</li><li>Locks(mutex)</li><li>Condition Variables</li></ul></td><td><ul><li>Loads</li><li>Stores</li><li>Test&Set</li><li>Disable Interrupts</li></ul></td></tr></table>
@@ -323,22 +452,22 @@
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #00bcd4">
+            <a href="/tags/COMP310/" style="color: #ff7d73">
                 COMP310
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/OS/" style="color: #00bcd4">
-                OS
+            <a href="/tags/Lecture-Notes/" style="color: #ffa2c4">
+                Lecture Notes
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Notes/" style="color: #00bcd4">
-                Lecture Notes
+            <a href="/tags/OS/" style="color: #ff7d73">
+                OS
             </a>
         </span>
         
@@ -376,10 +505,11 @@
             <h2 id="Multithreading"><a href="#Multithreading" class="headerlink" title="Multithreading"></a><strong>Multithreading</strong></h2><h3 id="Purpose"><a href="#Purpose" class="headerlink" title="Purpose"></a><strong>Purpose</strong></h3><p>Still use web server as an example:  </p>
 <ol>
 <li>to ensure a certain level of security(for example, to guarantee the running code on the server would not disrupt anything), we may use multiprocess since process itself ensures a segregation</li>
-<li>if security is guaranteed, multithread can be considered to its efficiency(by shared data)<br><em>Static data tend to be processed by process, dynamic by thread in server.</em></li>
+<li>if security is guaranteed, multithread can be considered to its efficiency(by shared data)</li>
 </ol>
+<p><em>Static data tend to be processed by thread, dynamic by process in server.</em></p>
 <h3 id="Basic-Approach-to-Multithreading"><a href="#Basic-Approach-to-Multithreading" class="headerlink" title="Basic Approach to Multithreading"></a><strong>Basic Approach to Multithreading</strong></h3><ol>
-<li>Divide “work” anibf multiple threads(based on the property of work per se)</li>
+<li>Divide “work” among multiple threads(based on the property of work per se)</li>
 <li>Shared data<ul>
 <li>Only <code>global variables</code> and <code>heap</code> can be shared.</li>
 <li>shared data accession by critical section</li>
@@ -471,12 +601,14 @@ Threadcode()&#123;
 <li>Access to the buffer is mutually exclusive(at a time only one process should be able to access the shared buffer and make changes to it)</li>
 </ol>
 <p><em>Locks cannot deal with it</em></p>
-<h4 id="Solution-Semaphores"><a href="#Solution-Semaphores" class="headerlink" title="Solution: Semaphores"></a><strong>Solution: Semaphores</strong></h4><h5 id="Single-producer-and-consumer"><a href="#Single-producer-and-consumer" class="headerlink" title="Single producer and consumer"></a><strong>Single producer and consumer</strong></h5><p>Requires 2 semaphores:</p>
+<h4 id="Solution-Semaphores"><a href="#Solution-Semaphores" class="headerlink" title="Solution: Semaphores"></a><strong>Solution: Semaphores</strong></h4><p><em>check the lecture</em></p>
+<h5 id="Single-producer-and-consumer"><a href="#Single-producer-and-consumer" class="headerlink" title="Single producer and consumer"></a><strong>Single producer and consumer</strong></h5><p>Requires 2 semaphores:</p>
 <ul>
 <li>emptyBuffer: initalize to N -&gt; N empty buffers; producer can run N times first</li>
 <li>fullBuffer: initialize to 0 -&gt; 0 full buffers; consumer can run 0 times first</li>
 </ul>
-<h5 id="Multiple-producers-and-consumers"><a href="#Multiple-producers-and-consumers" class="headerlink" title="Multiple producers and consumers"></a><strong>Multiple producers and consumers</strong></h5>
+<h5 id="Multiple-producers-and-consumers"><a href="#Multiple-producers-and-consumers" class="headerlink" title="Multiple producers and consumers"></a><strong>Multiple producers and consumers</strong></h5><hr>
+
             
         </div>
     </div>
@@ -489,14 +621,14 @@ Threadcode()&#123;
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #00bcd4">
+            <a href="/tags/COMP310/" style="color: #ff7d73">
                 COMP310
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Lecture-notes/" style="color: #00a596">
+            <a href="/tags/Lecture-notes/" style="color: #00bcd4">
                 Lecture notes
             </a>
         </span>
@@ -690,14 +822,14 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Notes/" style="color: #ff7d73">
+            <a href="/tags/Lecture-Notes/" style="color: #03a9f4">
                 Lecture Notes
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Operating-System/" style="color: #ffa2c4">
+            <a href="/tags/Operating-System/" style="color: #00bcd4">
                 Operating System
             </a>
         </span>
@@ -746,7 +878,7 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/Markdown/" style="color: #ff7d73">
+            <a href="/tags/Markdown/" style="color: #03a9f4">
                 Markdown
             </a>
         </span>
@@ -831,14 +963,14 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/HTML/" style="color: #00bcd4">
+            <a href="/tags/HTML/" style="color: #00a596">
                 HTML
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/web-development/" style="color: #ffa2c4">
+            <a href="/tags/web-development/" style="color: #03a9f4">
                 web development
             </a>
         </span>
@@ -888,7 +1020,7 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/test/" style="color: #ff7d73">
+            <a href="/tags/test/" style="color: #03a9f4">
                 test
             </a>
         </span>

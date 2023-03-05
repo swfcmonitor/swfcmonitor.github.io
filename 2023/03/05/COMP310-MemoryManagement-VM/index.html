@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>COMP310_MemoryManagement_VM | Aubade_Blog</title>
+        <meta name="author" content="Terrance">
+        <meta name="description" content="Persisting will immortalizes freedom.">
+        <meta name="keywords" content="">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+        <link rel="icon" href="/images/OIP.jpg">
+        <script src="https://cdn.staticfile.org/vue/3.2.45/vue.global.prod.min.js"></script>
+        <script src="https://cdn.staticfile.org/highlight.js/11.7.0/highlight.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/11.7.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.2.1/css/all.min.css">
+        
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+        
+        
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.js"></script>
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/contrib/auto-render.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.css">
+        
+        
+        <link rel="stylesheet" href="/css/fonts.min.css">
+        <link rel="stylesheet" href="/css/particlex.css">
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="loading" style="height: 100vh; width: 100vw; left: 0; top: 0; position: fixed; display: flex; z-index: 2147483647; background: #fff; transition: opacity 0.3s ease-out; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; pointer-events: none">
+    <div style="width: 50vmin; height: 50vmin; margin: auto; padding: 50px; border-radius: 50%; display: flex; border: solid 10px #a3ddfb">
+        <div style="margin: auto; text-align: center">
+            <h2>LOADING</h2>
+            <p>加载过慢请开启缓存，浏览器默认开启</p>
+            <img src="/images/loading.gif" style="height: 50px; border-radius: 0">
+        </div>
+    </div>
+</div>
+
+        <div id="layout">
+            <transition name="into">
+            <div id="main" v-show="showpage" style="display: -not-none">
+                <nav id="menu">
+    <div class="desktop-menu">
+        <a class="title" href="/">
+            <span>AUBADE_BLOG</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </div>
+    <div :class="&quot;phone-menu &quot; + menushow" id="phone-menu">
+        <div class="curtain" @click="menushow = !menushow" v-show="menushow"></div>
+        <div class="title" @click="menushow = !menushow">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;AUBADE_BLOG</span>
+        </div>
+        <transition name="slide">
+        <div class="items" v-show="menushow">
+            
+            <a href="/">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-house fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                </div>
+            </a>
+            
+            <a href="/about">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-id-card fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                </div>
+            </a>
+            
+            <a href="/archives">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-box-archive fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                </div>
+            </a>
+            
+            <a href="/categories">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-bookmark fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                </div>
+            </a>
+            
+            <a href="/tags">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-tags fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                </div>
+            </a>
+            
+        </div>
+        </transition>
+    </div>
+</nav>
+
+                <div class="article">
+    <div>
+        <h1>COMP310_MemoryManagement_VM </h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/3/5
+        </span>
+        
+        <span class="category">
+            <a href="/categories/Lecture-Notes/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                Lecture Notes
+            </a>
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/COMP310/" style="color: #03a9f4">COMP310</a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/Lecture-Notes/" style="color: #03a9f4">Lecture Notes</a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h3 id="Memory-Management-Virtual-Memory"><a href="#Memory-Management-Virtual-Memory" class="headerlink" title="Memory Management: Virtual Memory"></a>Memory Management: Virtual Memory</h3><p>The core conception in memory management is of <strong>address space mapping</strong>.<br>Difference between physical memory and virtual one is: the virtual must be continuous but physical can be fragmental.</p>
+<h4 id="Dreamy-Memory"><a href="#Dreamy-Memory" class="headerlink" title="Dreamy Memory"></a><strong>Dreamy Memory</strong></h4><p>The OS tries to make an illusion of using memory of the following properties(desired): <code> private, infinitely large, infinitely fast, nonvolatile, cheap memory</code>.</p>
+<h4 id="Memory-Hierarchy"><a href="#Memory-Hierarchy" class="headerlink" title="Memory Hierarchy"></a><strong>Memory Hierarchy</strong></h4><p>However, in real world, the memory follows the hierarchy:</p>
+<table>
+<tr><th colspan="5"><b>Faster access from left to right, higher price from left to right</b></th></tr>
+<tr><td>Registers(1 cycle)</td>
+<td>Cache(~10 cycles)</td>
+<td>Main Memory(~100 cycles)</td></td>
+<td>Flash Disk(~1M cycles)</td>
+<td>Traditional Disk(~10M cycles)</td>
+</tr>
+<tr><td colspan="3" align="center">Primary Storage</td></tr><tr><td colspan="2" align="center">On CPU</td></tr>
+<tr><td colspan="2" align="center">Not cared by OS</td><td colspan="3" align="center">cared by OS(OS memory management)</td></tr>
+</table>
+
+<p><em>Cycle here can be interpreted as nano-second(a speed measurement)</em></p>
+<h4 id="Goals-of-OS-Memory-Management"><a href="#Goals-of-OS-Memory-Management" class="headerlink" title="Goals of OS Memory Management"></a><strong>Goals of OS Memory Management</strong></h4><p><em>Every access to memory is in virtual instead of physical one, due to the virtual <strong>mapping</strong> by OS.</em></p>
+<ol>
+<li>Main memory allocation<ul>
+<li>location of kernel in address space</li>
+<li>what memory to allocate processes</li>
+<li>how many processes to allow</li>
+</ul>
+</li>
+<li>Protection(Segeregation)<ul>
+<li>no corruption to OS and other processes</li>
+<li>Privacy: can’t read data from other processes</li>
+</ul>
+</li>
+<li>Transperancy<ul>
+<li>Illusion of private memory for each process</li>
+</ul>
+</li>
+</ol>
+<h4 id="Protection"><a href="#Protection" class="headerlink" title="Protection"></a><strong>Protection</strong></h4><p>Protection to be leaded to prevent trespassing access to memory space.<br>The general idea is to add a <strong>check</strong> in the course of accession.</p>
+<blockquote>
+<p>The <strong>check</strong> is a hardware device (<strong>MMU</strong> Memory Management Unit).</p>
+</blockquote>
+<h4 id="Transparency"><a href="#Transparency" class="headerlink" title="Transparency"></a><strong>Transparency</strong></h4><p>Essence is to make sure the running of process won’t cause confliction.(no worry of actual running space)</p>
+<h4 id="Main-Memory-Allocation"><a href="#Main-Memory-Allocation" class="headerlink" title="Main Memory Allocation"></a><strong>Main Memory Allocation</strong></h4><h5 id="Where-to-allocate-the-kernel"><a href="#Where-to-allocate-the-kernel" class="headerlink" title="Where to allocate the kernel?"></a>Where to allocate the kernel?</h5><p>In the low memory address. The reason is the <strong>interrupt vectors</strong>(the address mapping of hardware device of transferring between user and kernel mode) are in the low memory.</p>
+<h5 id="Physical-and-Virtual-Memory"><a href="#Physical-and-Virtual-Memory" class="headerlink" title="Physical and Virtual Memory"></a><strong>Physical and Virtual Memory</strong></h5><p>The early days OS runs only single process at a time which is trusted so no virtual(logical) memory is needed; the process directly access the physical memory.<br>However, if the <u>process is malicious(tresspass into the kernel)</u> or there <u>are multiple processes runs at the sam time</u>, the model won’t work. Thus, logical(virtual) memory is needed.</p>
+<ul>
+<li>Virtual&#x2F;logical address space &#x3D; what the program thinks is its memory</li>
+<li>Physical address space &#x3D; actually is its memory(residing physically)</li>
+</ul>
+<p>CPU(process) –(<strong>generates virtual address space</strong>)–&gt; MAP(MMU) –(Transfer)–&gt; Memory(Physical Address)</p>
+<h5 id="Mapping-Scheme"><a href="#Mapping-Scheme" class="headerlink" title="Mapping Scheme"></a><strong>Mapping Scheme</strong></h5><p><strong>Classification</strong></p>
+<ul>
+<li>Base and Bounds</li>
+<li>Segmentation</li>
+<li>Paging</li>
+</ul>
+<p>For each scheme, we need to understand: <code>physical address space, virtual address space, virtual address, MMU.</code></p>
+<h6 id="Base-and-Bounds"><a href="#Base-and-Bounds" class="headerlink" title="Base and Bounds"></a><strong>Base and Bounds</strong></h6><ul>
+<li>Virtual Address Space<br>Linear address space: from 0 to MAX  </li>
+<li>Physical Address Space<br>Linear address space: from BASE to BOUNDS &#x3D; BASE + MAX<br>MMU</li>
+<li>MMU<br>MMU check <strong>relocation register(holds the base value)</strong> and <strong>limit register(holds the bounds value)</strong>. </li>
+<li>Free Space Distribution<br>OS will allocate the new process to the <strong>holes(space which is free)</strong>.<br><em>Free list : A list of the range of the physical memory not in use.</em><ul>
+<li>Method<ul>
+<li>Take first hole bigger than requested</li>
+<li>The smallest hole bigger than requested</li>
+<li>The largest hole -&gt; tries to eliminate many unusable smallest holes</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>The problem of base and bounds is there may be huge “free space” occupied by the process in the memory taht can’t be reallocated.<br>One solution is to implement by segmentation.</p>
+</blockquote>
+<h5 id="Segmentation"><a href="#Segmentation" class="headerlink" title="Segmentation"></a><strong>Segmentation</strong></h5><h2 id="In-stead-of-treat-one-program-as-a-chunk-in-address-space-we-segmented-it-in-three-parts-Code-Heap-Stack-which-can-grow-dynamically-gt-The-segmentation-has-many-ways-the-above-3-parts-is-only-one-of-them-gt-Can-be-treated-as-multiple-base-and-bounds-Virtual-Address-Space-Two-dimensional-space-with-set-of-segements-and-each-segment-‘i’-is-linear-from-0-to-MAX-i-Set-of-segments-each-linear-gt-The-order-of-the-segments-in-physical-space-has-no-need-to-be-the-same-as-in-virtual-address-space-Virtual-Address-Structure-Check-LectureSegment-Offset–-gt-Number-of-segment-bits-offset-bits-x3D-virtual-memory-address-bits-MMU-Segment-table-Indexed-by-segment-number-contains-base-limit-pair-base-physical-address-of-segment-in-memory-where-the-segment-starts-limit-length-of-the-segment-Pointer-to-segment-table-in-memory-length-of-segment-table-gt-notice-a-recursive-use-in-MMU"><a href="#In-stead-of-treat-one-program-as-a-chunk-in-address-space-we-segmented-it-in-three-parts-Code-Heap-Stack-which-can-grow-dynamically-gt-The-segmentation-has-many-ways-the-above-3-parts-is-only-one-of-them-gt-Can-be-treated-as-multiple-base-and-bounds-Virtual-Address-Space-Two-dimensional-space-with-set-of-segements-and-each-segment-‘i’-is-linear-from-0-to-MAX-i-Set-of-segments-each-linear-gt-The-order-of-the-segments-in-physical-space-has-no-need-to-be-the-same-as-in-virtual-address-space-Virtual-Address-Structure-Check-LectureSegment-Offset–-gt-Number-of-segment-bits-offset-bits-x3D-virtual-memory-address-bits-MMU-Segment-table-Indexed-by-segment-number-contains-base-limit-pair-base-physical-address-of-segment-in-memory-where-the-segment-starts-limit-length-of-the-segment-Pointer-to-segment-table-in-memory-length-of-segment-table-gt-notice-a-recursive-use-in-MMU" class="headerlink" title="In stead of treat one program as a chunk in address space, we segmented it in three parts: Code, Heap, Stack which can grow dynamically.&gt; The segmentation has many ways, the above 3 parts is only one of them.&gt;Can be treated as multiple base and bounds.* Virtual Address Space  Two-dimensional space with set of segements and each segment ‘i’ is linear from 0 to MAX(i)* Set of segments, each linear&gt;The order of the segments in physical space has no need to be the same as in virtual address space.* Virtual Address (Structure)Check LectureSegment + Offset–&gt; Number of segment bits + offset bits &#x3D; virtual memory address bits* MMU  * Segment table    Indexed by segment number    contains (base,limit pair)    * base: physical address of segment in memory(where the segment starts)    * limit: length of the segment  * Pointer to segment table in memory  * length of segment table&gt;notice a recursive use in MMU"></a>In stead of treat one program as a chunk in address space, we segmented it in <strong>three parts: Code, Heap, Stack</strong> which can grow dynamically.<br>&gt; The segmentation has many ways, the above 3 parts is only one of them.<br>&gt;<br>Can be treated as multiple base and bounds.<br>* Virtual Address Space<br>  Two-dimensional space with set of segements and each segment ‘i’ is linear from 0 to MAX(i)<br>* Set of segments, each linear<br>&gt;The order of the segments in physical space has no need to be the same as in virtual address space.<br>* Virtual Address (Structure)<br><em>Check Lecture</em><br><strong>Segment + Offset</strong><br>–&gt; Number of <strong>segment bits + offset bits</strong> &#x3D; <strong>virtual memory address bits</strong><br>* MMU<br>  * Segment table<br>    Indexed by segment number<br>    contains <strong>(base,limit pair)</strong><br>    * base: physical address of segment in memory(where the segment starts)<br>    * limit: length of the segment<br>  * Pointer to segment table in memory<br>  * length of segment table<br>&gt;notice a recursive use in MMU</h2><blockquote>
+<p>NOTICE: The info of mapping is all stored in MMU.</p>
+</blockquote>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+                <footer id="footer">
+    <div class="footer-wrap">
+        <div>
+            &copy;
+            2023 - 2023 Aubade_Blog
+            <span class="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;Terrance
+        </div>
+        <div>Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp; <a target="_blank" rel="noopener" href="https://github.com/argvchs/hexo-theme-particlex">ParticleX Theme</a></div>
+        
+    </div>
+</footer>
+
+            </div>
+            </transition>
+            <div id="showimg">
+                <img id="showimg-content">
+            </div>
+        </div>
+        <script src="/js/functions.js"></script>
+<script src="/js/particlex.js"></script>
+
+
+
+
+
+
+
+    </body>
+</html>

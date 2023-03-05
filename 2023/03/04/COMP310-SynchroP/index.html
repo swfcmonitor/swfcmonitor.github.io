@@ -159,17 +159,17 @@
             
             <span class="tag">
                 
-                <a href="/tags/COMP310/" style="color: #00a596">COMP310</a>
+                <a href="/tags/COMP310/" style="color: #ff7d73">COMP310</a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/OS/" style="color: #03a9f4">OS</a>
+                <a href="/tags/Lecture-Notes/" style="color: #00a596">Lecture Notes</a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/Lecture-Notes/" style="color: #ff7d73">Lecture Notes</a>
+                <a href="/tags/OS/" style="color: #00bcd4">OS</a>
             </span>
             
         </span>
@@ -206,7 +206,7 @@
 </li>
 </ul>
 <h4 id="Thread"><a href="#Thread" class="headerlink" title="Thread"></a><strong>Thread</strong></h4><h5 id="Def"><a href="#Def" class="headerlink" title="Def"></a><strong>Def</strong></h5><p>The smallest controllable unit of the OS. The essential part of thread is data(memory) sharing.</p>
-<h5 id="Diiference-to-Process"><a href="#Diiference-to-Process" class="headerlink" title="Diiference to Process"></a><strong>Diiference to Process</strong></h5><ul>
+<h5 id="Difference-to-Process"><a href="#Difference-to-Process" class="headerlink" title="Difference to Process"></a><strong>Difference to Process</strong></h5><ul>
 <li>Processes provide seperation -&gt; suitable for coarse interaction</li>
 <li>Threads do not provide seperation -&gt; suitable for tighter integration</li>
 </ul>
@@ -219,7 +219,7 @@
 <li>result of interleaving of thread executions</li>
 <li>program must be correct for all interleavings</li>
 </ul>
-<p>The essence of data racing is from the non-determinism of concurrency.  </p>
+<p>Data racing is one of the major causes of non-deterministicity of concurrency.  </p>
 <h4 id="Synchronization-Primitives"><a href="#Synchronization-Primitives" class="headerlink" title="Synchronization Primitives:"></a><strong>Synchronization Primitives:</strong></h4><p><em>implemented via hardware support in kernel mode</em></p>
 <table><tr><td>Software</td><td>Hardware</td></tr>
 <tr><td><ul><li>Monitors</li><li>Semaphores</li><li>Locks(mutex)</li><li>Condition Variables</li></ul></td><td><ul><li>Loads</li><li>Stores</li><li>Test&Set</li><li>Disable Interrupts</li></ul></td></tr></table>
