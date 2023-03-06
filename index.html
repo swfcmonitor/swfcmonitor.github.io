@@ -240,6 +240,33 @@
 </ul>
 </li>
 </ul>
+<hr>
+<h4 id="Computation-for-the-size-of-TLB"><a href="#Computation-for-the-size-of-TLB" class="headerlink" title="Computation for the size of TLB"></a><strong>Computation for the size of TLB</strong></h4><p><em><strong>Check the lecture</strong></em><br><img src="/.com//44.png" alt="COMPUTATION"></p>
+<h4 id="How-to-make-Page-Table-Smaller"><a href="#How-to-make-Page-Table-Smaller" class="headerlink" title="How to make Page Table Smaller?"></a><strong>How to make Page Table Smaller?</strong></h4><ul>
+<li>Big Pages</li>
+<li>Segmentation + Paging</li>
+<li>Multi-level page tables</li>
+</ul>
+<h5 id="Big-Pages"><a href="#Big-Pages" class="headerlink" title="Big Pages"></a><strong>Big Pages</strong></h5><p>Advantage: Easy to implement<br>Disadvantage: Larger internal fragmentation<br><em><strong>Most systems use 4KB or 8KB pages in common sense</strong></em></p>
+<h5 id="Segmentation-Paging"><a href="#Segmentation-Paging" class="headerlink" title="Segmentation + Paging"></a><strong>Segmentation + Paging</strong></h5><p>Divide address space into segments, than devide each segment into fixed-sized pages.<br>Virtual address divided into three portions:</p>
+<table><tr><td>seg</td><td>page number</td><td>page offsers</td></tr></table>
+
+<p>Advantage:  </p>
+<ul>
+<li>Supports sparse address spaces<ul>
+<li>decrease size of page tables</li>
+<li>if segment not used, not need for page table</li>
+</ul>
+</li>
+<li>enable sharing</li>
+<li>No external fragmentation</li>
+</ul>
+<p>Disadvantage: </p>
+<ul>
+<li>each segment <strong>might</strong> have large page table</li>
+<li>must allocate each page table contiguously</li>
+</ul>
+<h5 id="Multi-level-Page-Tables"><a href="#Multi-level-Page-Tables" class="headerlink" title="Multi-level Page Tables"></a><strong>Multi-level Page Tables</strong></h5><p>Turns the linear page table into tree structure. The level is not limited.<br><img src="/.com//55.png"><br><img src="/.com//56.png"></p>
 
             
         </div>
@@ -253,14 +280,14 @@
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #03a9f4">
+            <a href="/tags/COMP310/" style="color: #ff7d73">
                 COMP310
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Note/" style="color: #00bcd4">
+            <a href="/tags/Lecture-Note/" style="color: #00a596">
                 Lecture Note
             </a>
         </span>
@@ -428,14 +455,14 @@
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #ff7d73">
+            <a href="/tags/COMP310/" style="color: #03a9f4">
                 COMP310
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Notes/" style="color: #ff7d73">
+            <a href="/tags/Lecture-Notes/" style="color: #ffa2c4">
                 Lecture Notes
             </a>
         </span>
@@ -614,14 +641,14 @@
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #ff7d73">
+            <a href="/tags/COMP310/" style="color: #03a9f4">
                 COMP310
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Notes/" style="color: #ff7d73">
+            <a href="/tags/Lecture-Notes/" style="color: #ffa2c4">
                 Lecture Notes
             </a>
         </span>
@@ -776,7 +803,7 @@ Threadcode()&#123;
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #03a9f4">
+            <a href="/tags/COMP310/" style="color: #ff7d73">
                 COMP310
             </a>
         </span>
@@ -977,14 +1004,14 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #03a9f4">
+            <a href="/tags/COMP310/" style="color: #00a596">
                 COMP310
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Notes/" style="color: #00bcd4">
+            <a href="/tags/Lecture-Notes/" style="color: #00a596">
                 Lecture Notes
             </a>
         </span>
@@ -1033,7 +1060,7 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/Markdown/" style="color: #03a9f4">
+            <a href="/tags/Markdown/" style="color: #00bcd4">
                 Markdown
             </a>
         </span>
@@ -1118,14 +1145,14 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/HTML/" style="color: #03a9f4">
+            <a href="/tags/HTML/" style="color: #ff7d73">
                 HTML
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/web-development/" style="color: #ffa2c4">
+            <a href="/tags/web-development/" style="color: #00a596">
                 web development
             </a>
         </span>
@@ -1175,7 +1202,7 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/test/" style="color: #03a9f4">
+            <a href="/tags/test/" style="color: #ff7d73">
                 test
             </a>
         </span>
