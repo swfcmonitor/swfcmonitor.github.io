@@ -159,12 +159,12 @@
             
             <span class="tag">
                 
-                <a href="/tags/COMP310/" style="color: #ffa2c4">COMP310</a>
+                <a href="/tags/COMP310/" style="color: #00a596">COMP310</a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/Lecture-Notes/" style="color: #ff7d73">Lecture Notes</a>
+                <a href="/tags/Lecture-Notes/" style="color: #03a9f4">Lecture Notes</a>
             </span>
             
         </span>
@@ -179,7 +179,7 @@
 <tr><th colspan="5"><b>Faster access from left to right, higher price from left to right</b></th></tr>
 <tr><td>Registers(1 cycle)</td>
 <td>Cache(~10 cycles)</td>
-<td>Main Memory(~100 cycles)</td></td>
+<td>Main Memory(~100 cycles)</td>
 <td>Flash Disk(~1M cycles)</td>
 <td>Traditional Disk(~10M cycles)</td>
 </tr>
@@ -240,7 +240,7 @@
 </li>
 </ul>
 <blockquote>
-<p>The problem of base and bounds is there may be huge “free space” occupied by the process in the memory taht can’t be reallocated.<br>One solution is to implement by segmentation.</p>
+<p>The problem of base and bounds is there may be huge “free space” occupied by the process in the memory that can’t be reallocated <strong>(internal fragmentation problem)</strong>.<br>One solution is to implement by segmentation.</p>
 </blockquote>
 <h5 id="Segmentation"><a href="#Segmentation" class="headerlink" title="Segmentation"></a><strong>Segmentation</strong></h5><p>In stead of treat one program as a chunk in address space, we segmented it in <strong>three parts: Code, Heap, Stack</strong> which can grow dynamically.</p>
 <blockquote>
@@ -272,9 +272,24 @@
 </ul>
 </li>
 </ul>
+<h6 id="Advantage-and-Disadvantage"><a href="#Advantage-and-Disadvantage" class="headerlink" title="Advantage and Disadvantage"></a><strong>Advantage and Disadvantage</strong></h6><ul>
+<li>Disadvantage<br>Segmentation requires the segmentation table(a data structure) to be stored in MMU, which is convoluted.</li>
+<li>Advantage<br>The segmentation table actually enables memory sharing between processes.<br><em><strong>Sharing is not possible with base&amp;bounds but possible with segmentation.</strong></em></li>
+</ul>
+<h6 id="Memory-Sharing"><a href="#Memory-Sharing" class="headerlink" title="Memory Sharing"></a><strong>Memory Sharing</strong></h6><p>Memory sharing in segementation can be easily reached by having the same point address in the segmentation table.</p>
+<p><strong>Protection Bits</strong><br>To guarantee the <strong>protection property of memory allocation of OS</strong> in the course of memory sharing, <strong>protection bits</strong> by <strong>extra hardware support</strong> are needed.<br>Protection bits is a few more bits <strong>per segment</strong> indicating the permission of <strong>read, write,and execute</strong>.</p>
+<hr>
+<h5 id="Compaction"><a href="#Compaction" class="headerlink" title="Compaction"></a><strong>Compaction</strong></h5><p>Compaction is a way to solve fragmentation problems(holes) in the physical memory. It can be used in both base&amp;bounds and segmentation.<br>However, compaction is inefficient:</p>
+<ul>
+<li>Process needs to be stopped for rearranging</li>
+<li>data need to be copied to somewhere</li>
+<li>MMU table changed</li>
+</ul>
+<p>Besides, if a segment is needed to be expanded after compaction, the compaction needs to be restarted again.</p>
 <hr>
 <blockquote>
-<p>NOTICE: The info of mapping is all stored in MMU.</p>
+<p>NOTICE:<br>  The info of mapping is all stored in MMU.<br> Internal fragmentation only appears in base&amp;bounds since in segmentation the virtual spaces are all occupied. But external fragmentation happens in both.</p>
+<p>Internal Fragmentation: can take free space inside the virtual memory space<br>External Fragmentation: there’s holes(free space) in the physical memory</p>
 </blockquote>
 
     </div>

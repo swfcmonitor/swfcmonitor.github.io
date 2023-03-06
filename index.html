@@ -154,6 +154,115 @@
             
 
 <div class="post">
+    <a href="/2023/03/06/COMP310-MemoryManagement-DemandPaging/">
+        <h2 class="post-title">COMP310_MemoryManagement:DemandPaging</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/COMP310-Lecture-Note/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                -COMP310 -Lecture Note
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/3/6
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <h3 id="Memory-Management-Demand-Paging"><a href="#Memory-Management-Demand-Paging" class="headerlink" title="Memory Management: Demand Paging"></a>Memory Management: Demand Paging</h3><p>For system using right now, most are based on paging instead of segmentation or base&amp;bounds.</p>
+<p><em><strong>Segmentation can be compacted but hard to manage. Segmentation usually used in embedded development.</strong></em></p>
+<h4 id="Paging"><a href="#Paging" class="headerlink" title="Paging"></a><strong>Paging</strong></h4><p><strong>Terminology:</strong><br>  Page: fixed-size portion of virtual memory<br>  Frame: fixed-size portion of physical memory<br>  Page size &#x3D; Frame size<br>  Typical size: 4k-8k (always power of 2)  </p>
+<ul>
+<li>Virtual address space<br>Linear from 0 up to a multiple of page size</li>
+<li>Physical address space<br>Non-contiguous set of frames, one per page</li>
+<li>Virtual Address<ul>
+<li>Two components in the virtual address :<br>VPN:Virtual page number<br>Offser:offset within the page (page size &#x3D; $2^{offset}$)</li>
+<li><strong>VPN</strong> –(Address Translation(MMU))–&gt;<strong>PFN(Physical Frame Number)</strong></li>
+</ul>
+</li>
+<li>MMU<ul>
+<li>Page Table<ul>
+<li>Page table is the data structure mapping VPN to PFN.</li>
+<li>Each process has a page table.</li>
+</ul>
+</li>
+<li>MMU need a pointer to page table in memory and the length of the page table</li>
+</ul>
+</li>
+</ul>
+<h5 id="Advantage-amp-Disadvantage"><a href="#Advantage-amp-Disadvantage" class="headerlink" title="Advantage &amp; Disadvantage"></a><strong>Advantage &amp; Disadvantage</strong></h5><ul>
+<li>Advantage: easier to implemented compared to segmentation  with compaction</li>
+<li>Disadvantage: <ul>
+<li>P1: may have free(null) page &#x3D; sparsely used page may appears &#x3D; internal fragmentation $\Rightarrow$ external fragmentation<br><strong>The severity of this problem depends on the page size</strong></li>
+<li>P2: Low translation performance (virtuial address -&gt;page table(in main emory)-&gt;accession(in main memory)) &#x3D; reducing performance by factor of 2</li>
+</ul>
+</li>
+</ul>
+<h6 id="Solution-to-P1-valid-x2F-invalid-bit"><a href="#Solution-to-P1-valid-x2F-invalid-bit" class="headerlink" title="Solution to P1: valid&#x2F;invalid bit"></a><strong>Solution to P1: valid&#x2F;invalid bit</strong></h6><p>We can denote the corresponding pages with a valid bit to indicate whether its used or not. (<strong>Used for valid bit, unused for invalid bit</strong>)</p>
+<h6 id="Solution-to-P2-TLB-Translation-Lookaside-Buffer"><a href="#Solution-to-P2-TLB-Translation-Lookaside-Buffer" class="headerlink" title="Solution to P2: TLB(Translation Lookaside Buffer)"></a><strong>Solution to P2: TLB(Translation Lookaside Buffer)</strong></h6><p>TLB(Translation lookaside buffer) is a part of MMU which makes the map(translation from virtual address(page number) to physical address) fast.  </p>
+<p>Part of the page table is in the MMU(TLB). If the map is in it, we get a “hit”, thus no need to find in memory for the map again. If a miss happened, we need to find it in the memory.</p>
+<blockquote>
+<p>Notice that actually finding in memory is by use TLB again.</p>
+</blockquote>
+<p><img src="/.com//11111.png" alt="TLB HIT"><br><img src="/.com//22.png" alt="TLB MISS1"><br><img src="/.com//23.png" alt="TLB MISS2"></p>
+<p><strong>The hardware basis of TLB</strong><br>Use <strong>associative memory</strong>(special hardware)  </p>
+<ul>
+<li>Regular Memory -&gt; lookup by address</li>
+<li>Associative Memory -&gt; lookup by contents &amp; lookup in parallel(lookup all at the same time)</li>
+</ul>
+<p><strong>TLB Size</strong><br>TLB is expensive and small(64-1024 entries)<br>Want TLB hit rate close to 100%<br>If TLB full, need to replace existing entry</p>
+<p><strong>TLB Hit Rate and Locality</strong> </p>
+<ul>
+<li>Temporal Locality -&gt; An instruction that has been accessed will be re-accessed soon in the future</li>
+<li>Spatial Locality -&gt; An instruction is accessed, then the instructions near to it will likely soon be accessed</li>
+</ul>
+<h5 id="Process-Switching-with-TLB"><a href="#Process-Switching-with-TLB" class="headerlink" title="Process Switching with TLB"></a><strong>Process Switching with TLB</strong></h5><h6 id="Problem"><a href="#Problem" class="headerlink" title="Problem"></a><strong>Problem</strong></h6><p>Inability to distinguish between pageno of different processes in TLB.<br><img src="/.com//33.png" alt="TLB PROBLEM"></p>
+<h6 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a><strong>Solution</strong></h6><ul>
+<li>Invalidation of TLB : invalidate all TLB entries(by valid bits) as switching<ul>
+<li>process switch expensive</li>
+<li>new process incurs 100% TLB misses</li>
+</ul>
+</li>
+<li>Process Identifier : add process identifier to TLB entries<ul>
+<li>complicated</li>
+<li>cheaper</li>
+</ul>
+</li>
+</ul>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/COMP310-Lecture-Note/" style="color: #00a596">
+                -COMP310 -Lecture Note
+            </a>
+        </span>
+        
+    </div>
+    <a href="/2023/03/06/COMP310-MemoryManagement-DemandPaging/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
     <a href="/2023/03/05/COMP310-MemoryManagement-VM/">
         <h2 class="post-title">COMP310_MemoryManagement_VM</h2>
     </a>
@@ -187,7 +296,7 @@
 <tr><th colspan="5"><b>Faster access from left to right, higher price from left to right</b></th></tr>
 <tr><td>Registers(1 cycle)</td>
 <td>Cache(~10 cycles)</td>
-<td>Main Memory(~100 cycles)</td></td>
+<td>Main Memory(~100 cycles)</td>
 <td>Flash Disk(~1M cycles)</td>
 <td>Traditional Disk(~10M cycles)</td>
 </tr>
@@ -248,7 +357,7 @@
 </li>
 </ul>
 <blockquote>
-<p>The problem of base and bounds is there may be huge “free space” occupied by the process in the memory taht can’t be reallocated.<br>One solution is to implement by segmentation.</p>
+<p>The problem of base and bounds is there may be huge “free space” occupied by the process in the memory that can’t be reallocated <strong>(internal fragmentation problem)</strong>.<br>One solution is to implement by segmentation.</p>
 </blockquote>
 <h5 id="Segmentation"><a href="#Segmentation" class="headerlink" title="Segmentation"></a><strong>Segmentation</strong></h5><p>In stead of treat one program as a chunk in address space, we segmented it in <strong>three parts: Code, Heap, Stack</strong> which can grow dynamically.</p>
 <blockquote>
@@ -280,9 +389,24 @@
 </ul>
 </li>
 </ul>
+<h6 id="Advantage-and-Disadvantage"><a href="#Advantage-and-Disadvantage" class="headerlink" title="Advantage and Disadvantage"></a><strong>Advantage and Disadvantage</strong></h6><ul>
+<li>Disadvantage<br>Segmentation requires the segmentation table(a data structure) to be stored in MMU, which is convoluted.</li>
+<li>Advantage<br>The segmentation table actually enables memory sharing between processes.<br><em><strong>Sharing is not possible with base&amp;bounds but possible with segmentation.</strong></em></li>
+</ul>
+<h6 id="Memory-Sharing"><a href="#Memory-Sharing" class="headerlink" title="Memory Sharing"></a><strong>Memory Sharing</strong></h6><p>Memory sharing in segementation can be easily reached by having the same point address in the segmentation table.</p>
+<p><strong>Protection Bits</strong><br>To guarantee the <strong>protection property of memory allocation of OS</strong> in the course of memory sharing, <strong>protection bits</strong> by <strong>extra hardware support</strong> are needed.<br>Protection bits is a few more bits <strong>per segment</strong> indicating the permission of <strong>read, write,and execute</strong>.</p>
+<hr>
+<h5 id="Compaction"><a href="#Compaction" class="headerlink" title="Compaction"></a><strong>Compaction</strong></h5><p>Compaction is a way to solve fragmentation problems(holes) in the physical memory. It can be used in both base&amp;bounds and segmentation.<br>However, compaction is inefficient:</p>
+<ul>
+<li>Process needs to be stopped for rearranging</li>
+<li>data need to be copied to somewhere</li>
+<li>MMU table changed</li>
+</ul>
+<p>Besides, if a segment is needed to be expanded after compaction, the compaction needs to be restarted again.</p>
 <hr>
 <blockquote>
-<p>NOTICE: The info of mapping is all stored in MMU.</p>
+<p>NOTICE:<br>  The info of mapping is all stored in MMU.<br> Internal fragmentation only appears in base&amp;bounds since in segmentation the virtual spaces are all occupied. But external fragmentation happens in both.</p>
+<p>Internal Fragmentation: can take free space inside the virtual memory space<br>External Fragmentation: there’s holes(free space) in the physical memory</p>
 </blockquote>
 
             
@@ -297,7 +421,7 @@
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #03a9f4">
+            <a href="/tags/COMP310/" style="color: #00bcd4">
                 COMP310
             </a>
         </span>
@@ -483,14 +607,14 @@
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #00bcd4">
+            <a href="/tags/COMP310/" style="color: #00a596">
                 COMP310
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Notes/" style="color: #ffa2c4">
+            <a href="/tags/Lecture-Notes/" style="color: #00a596">
                 Lecture Notes
             </a>
         </span>
@@ -645,14 +769,14 @@ Threadcode()&#123;
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #03a9f4">
+            <a href="/tags/COMP310/" style="color: #00a596">
                 COMP310
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Notes/" style="color: #ffa2c4">
+            <a href="/tags/Lecture-Notes/" style="color: #ff7d73">
                 Lecture Notes
             </a>
         </span>
@@ -846,14 +970,14 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #00a596">
+            <a href="/tags/COMP310/" style="color: #00bcd4">
                 COMP310
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Notes/" style="color: #03a9f4">
+            <a href="/tags/Lecture-Notes/" style="color: #ff7d73">
                 Lecture Notes
             </a>
         </span>
@@ -902,7 +1026,7 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/Markdown/" style="color: #ff7d73">
+            <a href="/tags/Markdown/" style="color: #00bcd4">
                 Markdown
             </a>
         </span>
@@ -987,7 +1111,7 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/HTML/" style="color: #ff7d73">
+            <a href="/tags/HTML/" style="color: #ffa2c4">
                 HTML
             </a>
         </span>
@@ -1044,7 +1168,7 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/test/" style="color: #00a596">
+            <a href="/tags/test/" style="color: #ffa2c4">
                 test
             </a>
         </span>
