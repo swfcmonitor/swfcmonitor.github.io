@@ -181,20 +181,29 @@
         <div class="content" v-pre>
             
             <h3 id="Memory-Management-Demand-Paging"><a href="#Memory-Management-Demand-Paging" class="headerlink" title="Memory Management: Demand Paging"></a>Memory Management: Demand Paging</h3><p>For system using right now, most are based on paging instead of segmentation or base&amp;bounds.</p>
+<ul>
+<li>Base&amp;Bounds &#x3D;&gt; used only for niche</li>
+<li>Segmentation &#x3D;&gt; abandoned<ul>
+<li>high complexity for little gain</li>
+<li>Effect approximated with paging + valid bits</li>
+</ul>
+</li>
+<li>Paging &#x3D;&gt; <strong>universal</strong></li>
+</ul>
 <p><em><strong>Segmentation can be compacted but hard to manage. Segmentation usually used in embedded development.</strong></em></p>
 <h4 id="Paging"><a href="#Paging" class="headerlink" title="Paging"></a><strong>Paging</strong></h4><p><strong>Terminology:</strong><br>  Page: fixed-size portion of virtual memory<br>  Frame: fixed-size portion of physical memory<br>  Page size &#x3D; Frame size<br>  Typical size: 4k-8k (always power of 2)  </p>
 <ul>
 <li>Virtual address space<br>Linear from 0 up to a multiple of page size</li>
 <li>Physical address space<br>Non-contiguous set of frames, one per page</li>
 <li>Virtual Address<ul>
-<li>Two components in the virtual address :<br>VPN:Virtual page number<br>Offser:offset within the page (page size &#x3D; $2^{offset}$)</li>
+<li>Two components in the virtual address :<br>VPN:Virtual page number<br>Offser:offset within the page (page size &#x3D; $2^{offset}$ <strong>Bytes</strong>)</li>
 <li><strong>VPN</strong> –(Address Translation(MMU))–&gt;<strong>PFN(Physical Frame Number)</strong></li>
 </ul>
 </li>
 <li>MMU<ul>
 <li>Page Table<ul>
 <li>Page table is the data structure mapping VPN to PFN.</li>
-<li>Each process has a page table.</li>
+<li>Each process has a page table. -&gt; each time we do a context switch, the page table needs to be switched also</li>
 </ul>
 </li>
 <li>MMU need a pointer to page table in memory and the length of the page table</li>
@@ -209,9 +218,12 @@
 </ul>
 </li>
 </ul>
-<h6 id="Solution-to-P1-valid-x2F-invalid-bit"><a href="#Solution-to-P1-valid-x2F-invalid-bit" class="headerlink" title="Solution to P1: valid&#x2F;invalid bit"></a><strong>Solution to P1: valid&#x2F;invalid bit</strong></h6><p>We can denote the corresponding pages with a valid bit to indicate whether its used or not. (<strong>Used for valid bit, unused for invalid bit</strong>)</p>
+<h6 id="Solution-to-P1-valid-x2F-invalid-bit"><a href="#Solution-to-P1-valid-x2F-invalid-bit" class="headerlink" title="Solution to P1: valid&#x2F;invalid bit"></a><strong>Solution to P1: valid&#x2F;invalid bit</strong></h6><p>We can denote the corresponding pages with a valid bit to indicate whether its used or not. (<strong>Used for valid bit, unused for invalid bit</strong>)<br><strong>This actually means the page table itself no longer covers the entire virtual address space(all possible pages in thrtual memory) but the allocated pages by the process.</strong></p>
 <h6 id="Solution-to-P2-TLB-Translation-Lookaside-Buffer"><a href="#Solution-to-P2-TLB-Translation-Lookaside-Buffer" class="headerlink" title="Solution to P2: TLB(Translation Lookaside Buffer)"></a><strong>Solution to P2: TLB(Translation Lookaside Buffer)</strong></h6><p>TLB(Translation lookaside buffer) is a part of MMU which makes the map(translation from virtual address(page number) to physical address) fast.  </p>
 <p>Part of the page table is in the MMU(TLB). If the map is in it, we get a “hit”, thus no need to find in memory for the map again. If a miss happened, we need to find it in the memory.</p>
+<blockquote>
+<p>Page Table is stored in main memory and MMU has a pointer to it with the length. TLB is not in main memory but in MMU.</p>
+</blockquote>
 <blockquote>
 <p>Notice that actually finding in memory is by use TLB again.</p>
 </blockquote>
@@ -221,27 +233,38 @@
 <li>Regular Memory -&gt; lookup by address</li>
 <li>Associative Memory -&gt; lookup by contents &amp; lookup in parallel(lookup all at the same time)</li>
 </ul>
+<p><img src="/.com//01.png" alt="Regular Memory"><br><img src="/.com//02.png" alt="Regular Memory"><br><em>Key &#x3D; Pageno , Value &#x3D; Frameno</em></p>
 <p><strong>TLB Size</strong><br>TLB is expensive and small(64-1024 entries)<br>Want TLB hit rate close to 100%<br>If TLB full, need to replace existing entry</p>
 <p><strong>TLB Hit Rate and Locality</strong> </p>
 <ul>
 <li>Temporal Locality -&gt; An instruction that has been accessed will be re-accessed soon in the future</li>
-<li>Spatial Locality -&gt; An instruction is accessed, then the instructions near to it will likely soon be accessed</li>
+<li>Spatial Locality -&gt; An instruction is accessed, then the instructions near to it will likely soon be accessed<blockquote>
+<p>Accession to an array can be both an example to spatial locality and temporal locality</p>
+</blockquote>
+</li>
 </ul>
+<blockquote>
+<p>They are used together most of the time but may depend.</p>
+</blockquote>
 <h5 id="Process-Switching-with-TLB"><a href="#Process-Switching-with-TLB" class="headerlink" title="Process Switching with TLB"></a><strong>Process Switching with TLB</strong></h5><h6 id="Problem"><a href="#Problem" class="headerlink" title="Problem"></a><strong>Problem</strong></h6><p>Inability to distinguish between pageno of different processes in TLB.<br><img src="/.com//33.png" alt="TLB PROBLEM"></p>
 <h6 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a><strong>Solution</strong></h6><ul>
 <li>Invalidation of TLB : invalidate all TLB entries(by valid bits) as switching<ul>
-<li>process switch expensive</li>
-<li>new process incurs 100% TLB misses</li>
+<li>Pro: Simply requires one Valid Bit</li>
+<li>Con: process switch expensive</li>
+<li>Con: new process incurs 100% TLB misses</li>
 </ul>
 </li>
 <li>Process Identifier : add process identifier to TLB entries<ul>
-<li>complicated</li>
-<li>cheaper</li>
+<li>Con: complicated</li>
+<li>Pro: cheaper</li>
 </ul>
 </li>
 </ul>
 <hr>
 <h4 id="Computation-for-the-size-of-TLB"><a href="#Computation-for-the-size-of-TLB" class="headerlink" title="Computation for the size of TLB"></a><strong>Computation for the size of TLB</strong></h4><p><em><strong>Check the lecture</strong></em><br><img src="/.com//44.png" alt="COMPUTATION"></p>
+<blockquote>
+<p>Explanation:<br>4kB Pages &#x3D;&gt; The <u>number of entries</u> in a <strong>page</strong> is 4kB(4028).<br>Page table entries &#x3D;&gt; number of entries in a <strong>page table</strong><br>Every page table entry &#x3D;&gt; the <strong>size</strong> of each table entry in the main memory</p>
+</blockquote>
 <h4 id="How-to-make-Page-Table-Smaller"><a href="#How-to-make-Page-Table-Smaller" class="headerlink" title="How to make Page Table Smaller?"></a><strong>How to make Page Table Smaller?</strong></h4><ul>
 <li>Big Pages</li>
 <li>Segmentation + Paging</li>
@@ -267,6 +290,123 @@
 <li>must allocate each page table contiguously</li>
 </ul>
 <h5 id="Multi-level-Page-Tables"><a href="#Multi-level-Page-Tables" class="headerlink" title="Multi-level Page Tables"></a><strong>Multi-level Page Tables</strong></h5><p>Turns the linear page table into tree structure. The level is not limited.<br><img src="/.com//55.png"><br><img src="/.com//56.png"></p>
+<hr>
+<h4 id="Leaving-the-assumption"><a href="#Leaving-the-assumption" class="headerlink" title="Leaving the assumption"></a>Leaving the assumption</h4><p>Previous discussion is based on the assumption that the <strong>whole program</strong> resides in the memory. However, now we are dropping this assumption.</p>
+<ul>
+<li>Impossible to reside a program in a memory if it’s huge</li>
+<li>Only needed pieces need to be resided &lt;&#x3D; load the needed pieces from the file system &#x3D;&gt; many advantages(multiple programs running in a memory&amp;load useful pieces only)</li>
+</ul>
+<h5 id="Swapping"><a href="#Swapping" class="headerlink" title="Swapping"></a>Swapping</h5><p><strong>Def</strong>:<br> Store the <strong>whole program</strong> temporarily on the disk to get rid of one or more processes.<br><strong>Explanantion</strong>:<br>Processes running on the OS resides on disk; whenever the <strong>scheduler</strong>(context switching) decides one to run, the <strong>whole process</strong> switch into the memory from disk.(also the same for switching out)<br><strong>Disadvantage</strong>:  </p>
+<ul>
+<li>High latency since need to read from disk(~100million cycles).</li>
+<li>Parallelism disabled if the program switching in is huge.<br><strong>Solution</strong>:<br>Demand Paging</li>
+</ul>
+<h5 id="Demand-Paging"><a href="#Demand-Paging" class="headerlink" title="Demand Paging"></a>Demand Paging</h5><p><strong>Difference with swapping</strong>:  </p>
+<ul>
+<li>Swapping &#x3D; all of the program is in memory or all of the program is on disk</li>
+<li>Demand paging &#x3D; part of program is in memory</li>
+</ul>
+<p><strong>Reason for use demand paging</strong>:</p>
+<ol>
+<li>We want to create an illusion for the program that it has a huge memory space(virual memory space &gt;&gt; physical memory space)</li>
+<li>Shorter process startup latency<ul>
+<li>start process with part of them in memory (Even 1 page suffices)</li>
+</ul>
+</li>
+<li>Better use of main memory<ul>
+<li>Enable parellelism of running multiple programs</li>
+</ul>
+</li>
+</ol>
+<p><strong>Location of the program</strong>:<br>Part of it is in memory but most of it is on disk(a special partition called <strong>backing store</strong>(<em>only the OS has the access to the backing store</em>)).</p>
+<blockquote>
+<p>NOTICE: Backing store has all the page information of a program.</p>
+</blockquote>
+<blockquote>
+<p>NOTICE: CPU only directly access memory. CPU access data on disk through OS(OS connect page to the resding backings store).</p>
+</blockquote>
+<p><strong>High-level Mechanism</strong>:  </p>
+<ul>
+<li>Page fault:<br>Program needs to access part only on disk</li>
+<li>Page fault handling:<br>The process for the OS to handle the page fault: program suspended -&gt; OS runs and gets page from disk -&gt; program is restarted</li>
+</ul>
+<ol>
+<li><p>Discover Page Fault<br>Idea: Using the valid bit in page table</p>
+<ul>
+<li>With demand paging:<br> <em>(Exception from the following situation raise error of the OS)</em><br> Valid bit &#x3D; 0: page is invalid OR <strong>page is on disk</strong><br> Valid bit &#x3D; 1: page is valid AND <strong>page is in memory</strong><br> (indicates more info needed for the OS (Invalid&#x2F;on-disk?))</li>
+</ul>
+</li>
+<li><p>Suspendisng thne Faulting Process<br>Idea: Trap into the OS</p>
+<ul>
+<li>invalid bit access generates trap</li>
+<li>Process info stored into the PCB and suspend the process(to increas the efficiency of the CPU)<blockquote>
+<p>Trapping: Making the switch between the user mode and the kernel mode.</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>Getting the page from the disk<br>Idea: OS handles fetchs from disk</p>
+<ul>
+<li><p>Allocate the free frame(if exist) in memory to the process</p>
+</li>
+<li><p>Find page on disk and transfer the page from disk to frame</p>
+<ul>
+<li>Two tables are needed here for transferring: Extra table mapping page to backing store</li>
+</ul>
+</li>
+<li><p>While the disk is Busy</p>
+<ul>
+<li>invoke scheduler to run another process</li>
+<li>when disk interrupt arrives, suspend the running process and get back to page default handling</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Completing page fault handling</p>
+<ul>
+<li>set the introduced page to valid and assign it a frame number(renew page table)</li>
+<li>set process state to ready</li>
+<li>invoke scheduler &#x3D;&gt; next time to run will try toaccess the page again</li>
+</ul>
+</li>
+</ol>
+<p><img src="/.com//60.png" alt="Demand Paging Summary1"><br><img src="/.com//61.png" alt="Demand Paging Summary2"></p>
+<p><strong>How to find a free frame in the main memory?</strong><br>If no free frame available, pick a frame to be replaced -&gt; invalidates its page table entry and TLB entry -&gt; write the frame to disk</p>
+<blockquote>
+<p>NOTICE: No worry of loosing information by replacing since all pages are stored in backing store.</p>
+</blockquote>
+<p><strong>How to pick the page&#x2F;frame to replace?(raplacing policies)</strong></p>
+<ul>
+<li>Random</li>
+<li>FIFO</li>
+<li>OPT</li>
+<li>LRU</li>
+</ul>
+<p>Goal: minimizing the page fault since they slow down the program</p>
+<p><strong>Random</strong> (Relatively universal)<br>Random page is replaced.  </p>
+<ul>
+<li>PRO: Easy to implement  </li>
+<li>CON: Does not take advantage of spatial&#x2F;temporal locality</li>
+</ul>
+<p><strong>FIFO</strong><br>Oldest page is replaced.(The first one brough into memory)</p>
+<ul>
+<li>PRO: Easy to implement, Fair</li>
+<li>CON: Does not account of “hot” pages</li>
+</ul>
+<p><strong>OPT(An optimal algorithm)</strong><br>Replace the page that will be referenced the furthest in the future.(OPT insetad of approximated OPT)</p>
+<ul>
+<li>PRO: Provably optimal</li>
+<li>CON: Hard to implement(Can’t predict)<blockquote>
+<p>OPT always acts as a basis of comaprison for other algorithms</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>LRU(Least Recently Used)</strong><br>Use the past information to predict future usage</p>
+<ul>
+<li>PRO: Approximate OPT</li>
+<li>CON: Hard to implement, does not handle all workloads well<br><img src="/.com//70.png" alt="LRU Hardware Support"></li>
+</ul>
+<p>是否virtual address包含了在硬盘上的部分而并没有对于物理内存形成一个完全的一一映射？</p>
 
             
         </div>
@@ -287,7 +427,7 @@
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Note/" style="color: #00a596">
+            <a href="/tags/Lecture-Note/" style="color: #ffa2c4">
                 Lecture Note
             </a>
         </span>
@@ -455,14 +595,14 @@
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #03a9f4">
+            <a href="/tags/COMP310/" style="color: #ff7d73">
                 COMP310
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Notes/" style="color: #ffa2c4">
+            <a href="/tags/Lecture-Notes/" style="color: #ff7d73">
                 Lecture Notes
             </a>
         </span>
@@ -641,14 +781,14 @@
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #03a9f4">
+            <a href="/tags/COMP310/" style="color: #00a596">
                 COMP310
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Notes/" style="color: #ffa2c4">
+            <a href="/tags/Lecture-Notes/" style="color: #ff7d73">
                 Lecture Notes
             </a>
         </span>
@@ -803,14 +943,14 @@ Threadcode()&#123;
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #ff7d73">
+            <a href="/tags/COMP310/" style="color: #00a596">
                 COMP310
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Notes/" style="color: #ff7d73">
+            <a href="/tags/Lecture-Notes/" style="color: #00a596">
                 Lecture Notes
             </a>
         </span>
@@ -1004,14 +1144,14 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #00a596">
+            <a href="/tags/COMP310/" style="color: #03a9f4">
                 COMP310
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Notes/" style="color: #00a596">
+            <a href="/tags/Lecture-Notes/" style="color: #ffa2c4">
                 Lecture Notes
             </a>
         </span>
@@ -1060,7 +1200,7 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/Markdown/" style="color: #00bcd4">
+            <a href="/tags/Markdown/" style="color: #00a596">
                 Markdown
             </a>
         </span>
@@ -1145,14 +1285,14 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/HTML/" style="color: #ff7d73">
+            <a href="/tags/HTML/" style="color: #00a596">
                 HTML
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/web-development/" style="color: #00a596">
+            <a href="/tags/web-development/" style="color: #03a9f4">
                 web development
             </a>
         </span>
@@ -1202,7 +1342,7 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/test/" style="color: #ff7d73">
+            <a href="/tags/test/" style="color: #00a596">
                 test
             </a>
         </span>
