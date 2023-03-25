@@ -302,11 +302,93 @@
 </ul>
 <h4 id="LINUX-PRIMITIVES"><a href="#LINUX-PRIMITIVES" class="headerlink" title="LINUX PRIMITIVES"></a>LINUX PRIMITIVES</h4><p>Collapses in a single interface of the previous primitives.</p>
 <blockquote>
-<p>UID is nerver visible at the user level!!</p>
+<p>UID is never visible at the user level!!</p>
 </blockquote>
-<h3 id="Disks"><a href="#Disks" class="headerlink" title="Disks"></a>Disks</h3><p><img src="/.com//6.png" alt="Structure of DISK"><br>Each platter has two surfaces, each surface has its own tracks; each track has its own sectors.<br>Cylinder: a logical grouping of tracks (same distance from the spindle)<br><img src="/.com//61.png" alt="Structure of DISK"><br><img src="/.com//62.png" alt="Structure of DISK"></p>
-<p><strong>Disk Interface</strong><br>Disk interface is accessible by sector only.</p>
+<h3 id="Disks"><a href="#Disks" class="headerlink" title="Disks"></a>Disks</h3><p><img src="/.com//6.png" alt="Structure of DISK"><br>Each platter has two surfaces, each surface has its own tracks; each track has its own sectors.<br>Cylinder: a logical grouping of tracks (same distance from the spindle)<br>Block: multiple sectors make up a block.<br><img src="/.com//61.png" alt="Structure of DISK"><br><img src="/.com//62.png" alt="Structure of DISK"></p>
+<h4 id="Disk-Interface"><a href="#Disk-Interface" class="headerlink" title="Disk Interface"></a>Disk Interface</h4><p>Disk interface is accessible by sector only.</p>
 <hr>
+<blockquote>
+<p>For memory management, the CPU can directly access memory. CPU can’t read directly from disk, it must go from OS.</p>
+</blockquote>
+<h4 id="Disk-Access"><a href="#Disk-Access" class="headerlink" title="Disk Access"></a>Disk Access</h4><ul>
+<li>Head Selection: choose the platter to read&#x2F;write</li>
+<li>Seek Time: choose the corresponding track</li>
+<li>Rotational Latency: point to the corresponding block</li>
+<li>Transfer Time: reading or writing to the devixce</li>
+<li>Controller Overhead:</li>
+</ul>
+<p>Seek Time dominates the time complexity.<br>Disk Access time &gt;&gt; Memory access time(nanoseconds)</p>
+<table>
+<tr><td>Component</td><td>Time</td></tr>
+<tr><td>Head Selection</td><td>nanoseconds</td></tr>
+<tr><td>Seek Time</td><td>3-12 milliseconds</td></tr>
+<tr><td>Rotational Latency</td><td>2-7 milliseconds</td></tr>
+<tr><td>Transfer Time</td><td>microseconds</td></tr>
+<tr><td>Controller Overhead</td><td> less than 1 millisecond</td></tr>
+</table>
+
+<blockquote>
+<p>To minimize latency, disk saves the file to the nearest track with priority.<br>When the disk is doing sequential access, the seek and rotational delay only appears once.</p>
+</blockquote>
+<h4 id="Optimizing-Disk-Access"><a href="#Optimizing-Disk-Access" class="headerlink" title="Optimizing Disk Access"></a>Optimizing Disk Access</h4><p><strong>Rules</strong>:</p>
+<ol>
+<li><p>Do not access disk, use a cache<br> What? -&gt; Keep currently accessed blocks in memory.<br> Why? -&gt; Reduce latency and disk load<br> How? -&gt; Reserve kernel memory for cache<br> *Cache entries: file blocks (of block size)</p>
+<ul>
+<li><p><strong>Read with a cache</strong></p>
+<ul>
+<li>If in cache: return data from cache</li>
+<li>If not: find free cache slot -&gt; initial disk read -&gt; when disk read completes, return data</li>
+</ul>
+</li>
+<li><p><strong>Write with a cache</strong></p>
+<ul>
+<li>writing will always be buffered in memory, so we always writing in the cache</li>
+<li>How does it get to disk?<ul>
+<li>write through: after writing to the cache, directly write to the disk and then return to the user</li>
+<li>write behind: return to the user first then write to the disk<br> <em>(The buffer needs to be flushed into the device at some point later)</em></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>Response time: write-behind is better<br>Disk Load: write behind is better<br>Crash: write-through is better</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>Read ahead and do not wait disk (prefetching)<br>#Only for sequential access<br>What? -&gt; request a block and the next blocks will be read also<br>Why? -&gt; No disk I&#x2F;O on user access to block i+1<br>How? -&gt; Put the next blocks in the buffer cache</p>
+</li>
+<li><p>Minimize Seeks</p>
+<ul>
+<li>Clever Disk Allocation<br> <strong>Idea</strong>: locate related data on same cylinder, and allocate <u>related</u>(sequential access &#x2F; consecutive blocks in the same file) blocks <u>together</u>(on the same or nearby cylinder)</li>
+<li>Disk Scheduling<br>  <strong>Idea</strong>: reorder requests to seek as little as possible, rearranging the order of file tasks(read&#x2F;write)<ul>
+<li>FCFS</li>
+<li>SSTF(Shortest Seek Time First)<ul>
+<li>Pro: good seek times </li>
+<li>Con: Starvation</li>
+</ul>
+</li>
+<li>SCAN<ul>
+<li>Seperate the movement in two parts, one continually moving up, another continually moving down</li>
+</ul>
+</li>
+<li>C-SCAN<ul>
+<li>always moving in one direction (see class)</li>
+</ul>
+</li>
+<li>C-LOOK<ul>
+<li>same as C-SCAN but not going all the way to zero or max of cylinder<blockquote>
+<p>Clever disk allocation and disk scheduling are complementary.<br>Low load: clever allocation is better (not many scheduling oppurtunities)<br>High load: disk scheduling is better</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Avoid rotational latency</p>
+</li>
+</ol>
 
             
         </div>
@@ -320,14 +402,14 @@
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #ffa2c4">
+            <a href="/tags/COMP310/" style="color: #ff7d73">
                 COMP310
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Notes/" style="color: #00bcd4">
+            <a href="/tags/Lecture-Notes/" style="color: #ffa2c4">
                 Lecture Notes
             </a>
         </span>
@@ -603,14 +685,14 @@
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #ffa2c4">
+            <a href="/tags/COMP310/" style="color: #00bcd4">
                 COMP310
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Note/" style="color: #00bcd4">
+            <a href="/tags/Lecture-Note/" style="color: #ff7d73">
                 Lecture Note
             </a>
         </span>
@@ -778,14 +860,14 @@
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #00a596">
+            <a href="/tags/COMP310/" style="color: #03a9f4">
                 COMP310
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Notes/" style="color: #03a9f4">
+            <a href="/tags/Lecture-Notes/" style="color: #ff7d73">
                 Lecture Notes
             </a>
         </span>
@@ -964,14 +1046,14 @@
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #ffa2c4">
+            <a href="/tags/COMP310/" style="color: #ff7d73">
                 COMP310
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Notes/" style="color: #ff7d73">
+            <a href="/tags/Lecture-Notes/" style="color: #ffa2c4">
                 Lecture Notes
             </a>
         </span>
@@ -1133,7 +1215,7 @@ Threadcode()&#123;
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Notes/" style="color: #00a596">
+            <a href="/tags/Lecture-Notes/" style="color: #03a9f4">
                 Lecture Notes
             </a>
         </span>
@@ -1327,14 +1409,14 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/COMP310/" style="color: #ffa2c4">
+            <a href="/tags/COMP310/" style="color: #00a596">
                 COMP310
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Lecture-Notes/" style="color: #03a9f4">
+            <a href="/tags/Lecture-Notes/" style="color: #00bcd4">
                 Lecture Notes
             </a>
         </span>
@@ -1383,7 +1465,7 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/Markdown/" style="color: #00bcd4">
+            <a href="/tags/Markdown/" style="color: #ff7d73">
                 Markdown
             </a>
         </span>
@@ -1468,14 +1550,14 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/HTML/" style="color: #03a9f4">
+            <a href="/tags/HTML/" style="color: #00a596">
                 HTML
             </a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/web-development/" style="color: #00bcd4">
+            <a href="/tags/web-development/" style="color: #00a596">
                 web development
             </a>
         </span>
@@ -1525,7 +1607,7 @@ exit
         
         <span class="tag">
             
-            <a href="/tags/test/" style="color: #03a9f4">
+            <a href="/tags/test/" style="color: #00bcd4">
                 test
             </a>
         </span>
