@@ -1,0 +1,344 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>COMP310-Intro-to-FileSystems | Aubade_Blog</title>
+        <meta name="author" content="Terrance">
+        <meta name="description" content="Persisting will immortalizes freedom.">
+        <meta name="keywords" content="">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+        <link rel="icon" href="/images/OIP.jpg">
+        <script src="https://cdn.staticfile.org/vue/3.2.45/vue.global.prod.min.js"></script>
+        <script src="https://cdn.staticfile.org/highlight.js/11.7.0/highlight.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/11.7.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.2.1/css/all.min.css">
+        
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+        
+        
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.js"></script>
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/contrib/auto-render.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.css">
+        
+        
+        <link rel="stylesheet" href="/css/fonts.min.css">
+        <link rel="stylesheet" href="/css/particlex.css">
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="loading" style="height: 100vh; width: 100vw; left: 0; top: 0; position: fixed; display: flex; z-index: 2147483647; background: #fff; transition: opacity 0.3s ease-out; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; pointer-events: none">
+    <div style="width: 50vmin; height: 50vmin; margin: auto; padding: 50px; border-radius: 50%; display: flex; border: solid 10px #a3ddfb">
+        <div style="margin: auto; text-align: center">
+            <h2>LOADING</h2>
+            <p>加载过慢请开启缓存，浏览器默认开启</p>
+            <img src="/images/loading.gif" style="height: 50px; border-radius: 0">
+        </div>
+    </div>
+</div>
+
+        <div id="layout">
+            <transition name="into">
+            <div id="main" v-show="showpage" style="display: -not-none">
+                <nav id="menu">
+    <div class="desktop-menu">
+        <a class="title" href="/">
+            <span>AUBADE_BLOG</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </div>
+    <div :class="&quot;phone-menu &quot; + menushow" id="phone-menu">
+        <div class="curtain" @click="menushow = !menushow" v-show="menushow"></div>
+        <div class="title" @click="menushow = !menushow">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;AUBADE_BLOG</span>
+        </div>
+        <transition name="slide">
+        <div class="items" v-show="menushow">
+            
+            <a href="/">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-house fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                </div>
+            </a>
+            
+            <a href="/about">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-id-card fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                </div>
+            </a>
+            
+            <a href="/archives">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-box-archive fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                </div>
+            </a>
+            
+            <a href="/categories">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-bookmark fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                </div>
+            </a>
+            
+            <a href="/tags">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-tags fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                </div>
+            </a>
+            
+        </div>
+        </transition>
+    </div>
+</nav>
+
+                <div class="article">
+    <div>
+        <h1>COMP310-Intro-to-FileSystems </h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/3/25
+        </span>
+        
+        <span class="category">
+            <a href="/categories/COMP310/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                COMP310
+            </a>
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/COMP310/" style="color: #ff7d73">COMP310</a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/Lecture-Notes/" style="color: #ff7d73">Lecture Notes</a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <p>OS &#x3D; Process Management + Memory Management + File System + I&#x2F;O</p>
+<h2 id="I-x2F-O-Devices"><a href="#I-x2F-O-Devices" class="headerlink" title="I&#x2F;O Devices"></a>I&#x2F;O Devices</h2><p><img src="/.com//0.png" alt="I/O System Architecture"><br><strong>Buses Type</strong>:  </p>
+<ul>
+<li>PCIE (peripheral component interconnect express)<ul>
+<li>PCIE is often used to connect to high performance devices</li>
+</ul>
+</li>
+<li>DMI (Direct media interface)</li>
+<li>USB (Universal serial bus)</li>
+<li>eSATA (external SATA)<ul>
+<li>SATA (Serial ATA)</li>
+<li>ATA (the AT attachment, in reference to providing connection to the IBM PC AT)<blockquote>
+<p><strong>Reason for the classification(architecture)</strong>  </p>
+<ol>
+<li>Physical significance<br>  Higher performance devices connected via high performance buses(wider and shorter)</li>
+<li>To put a large number of devices into the system</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="How-does-OS-communicate-with-I-x2F-O-devices"><a href="#How-does-OS-communicate-with-I-x2F-O-devices" class="headerlink" title="How does OS communicate with I&#x2F;O devices?"></a>How does OS communicate with I&#x2F;O devices?</h3><p>By <strong>Canonical Device Interface</strong>.<br><strong>Canonical Device Interface</strong>:<br>Interface made of 3 registers:</p>
+<ul>
+<li>Status - current status of device</li>
+<li>Command - OS tells device what command to perform</li>
+<li>Data - send&#x2F;receive data from device</li>
+</ul>
+<p><em>OS alters the registers to communicate with IO&#x2F;O devices</em></p>
+<p><img src="/.com//1.png" alt="CDI(Canonical Device Interface)"><br>All the hidden internals are visible to the hardware but invisible to the OS.</p>
+<h4 id="How-does-OS-use-device-interface"><a href="#How-does-OS-use-device-interface" class="headerlink" title="How does OS use device interface?"></a>How does OS use device interface?</h4><ul>
+<li><p>DMA</p>
+</li>
+<li><p>Polling<br>OS waits untile the device is ready. Repeatedly checks the STATUS of the registers in a loop.  </p>
+<ul>
+<li>Pro: simple</li>
+<li>Con: Wasted CPU cycles</li>
+</ul>
+</li>
+<li><p>Interrupt<br>Put process requesting I&#x2F;O to <strong>sleep</strong>. -&gt; <strong>Context switch</strong> to a different process. -&gt; When I&#x2F;O finishes, wake sleeping process with an <strong>interrupt</strong>. -&gt; CPU jumps to <strong>Interrupt Handler</strong> in the OS. -&gt; wake up A</p>
+<ul>
+<li>Pro: no waste of CPU cycles</li>
+<li>Con: expensive context switch (polling can be better for fast devices since $T(I&#x2F;O)&lt;T(context switch)$)<blockquote>
+<ol>
+<li>Same mechanism is used for demand paging</li>
+<li>A is waken up by <strong>interrupt handler</strong></li>
+</ol>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>NOTICE: <strong>Interrupt</strong> is generated by the hardware to initiate a context switch(switching between user and kernel mode). <strong>Syscall</strong> is generated by the process to request functionality from kernel mode, also initiates a context switch(switching between user and kernel mode). <strong>Trap</strong> goes from user space to kernel space.</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="How-to-handle-different-devices-in-OS"><a href="#How-to-handle-different-devices-in-OS" class="headerlink" title="How to handle different devices in OS?"></a>How to handle different devices in OS?</h3><p>The problem is that each device may have its own protocol(The interface is specific).</p>
+<p><strong>Solution: Abstraction</strong>:<br>Adding a layer of abstraction between OS and devices: device driver.</p>
+<ul>
+<li>Device driver creates a connection between each device and the OS.</li>
+<li>Each device needs its own driver</li>
+<li>Device driver is a piece of software in OS</li>
+</ul>
+<p><img src="/.com//3.png"></p>
+<h2 id="Permanent-Storage"><a href="#Permanent-Storage" class="headerlink" title="Permanent Storage"></a>Permanent Storage</h2><ul>
+<li>Permanent across machine failures&#x2F;restarts</li>
+<li>Permanent across disk failures</li>
+</ul>
+<p><strong>Permanent Storage Media</strong>:<br>Flash SSD, HDD, …</p>
+<h3 id="File-System-API"><a href="#File-System-API" class="headerlink" title="File System API"></a>File System API</h3><h4 id="FILE"><a href="#FILE" class="headerlink" title="FILE"></a>FILE</h4><ul>
+<li>An un-intepreted collection of objects composed of bytes, records,etc.<ul>
+<li>un-intepreted: File system does not know the meaning of the data; only application does</li>
+</ul>
+</li>
+</ul>
+<p><strong>Type</strong>:<br>Typed &#x3D; File System knows what the object means<br><em>(Sometimes, the file type is distinguiished by file extensions but it actually depends on the OS itself: UNIX ignore the extension, Windows does not ignore)</em></p>
+<ul>
+<li>Pro: prevent errors; efficient storage</li>
+<li>Con: inflexible; lot of code</li>
+</ul>
+<blockquote>
+<p>We only look <strong>untyped</strong> files in this course</p>
+</blockquote>
+<h3 id="File-System-Primitives"><a href="#File-System-Primitives" class="headerlink" title="File System Primitives"></a>File System Primitives</h3><p><strong>Checking the lecture</strong></p>
+<ul>
+<li>Access</li>
+<li>Concurrency</li>
+<li>Naming</li>
+<li>Protection</li>
+</ul>
+<h4 id="ACCESS"><a href="#ACCESS" class="headerlink" title="ACCESS"></a>ACCESS</h4><p><strong>Sequential &amp; Random Access</strong>  </p>
+<ul>
+<li>Sequential:<br>A portion of the file is read in order. If the read(write) is suspended and restart, it will continue at the last suspension point.</li>
+<li>Random:<br>No connection between accesses in different times.</li>
+</ul>
+<blockquote>
+<p>Read() itself is random access but we can use file pointer to convert it into sequential access.</p>
+</blockquote>
+<blockquote>
+<p>Sequential access is very common and all OS provide it. Not all OS provide random access.(but they may provide seek())</p>
+</blockquote>
+<h4 id="CONCURRENCY-concueerent-sequential-access"><a href="#CONCURRENCY-concueerent-sequential-access" class="headerlink" title="CONCURRENCY(concueerent sequential access)"></a>CONCURRENCY(concueerent sequential access)</h4><p>Two processes access the same file.<br>Use <code>Open()</code> and <code>Close()</code> to deal with the situation.</p>
+<p>The combination of <code>Open()</code> and <code>Read()</code> is easy; however, the combination of <code>Open()</code> to <code>Write()</code> is tricky since the file itself is being modified as writing.</p>
+<ul>
+<li>Seperate file instances altogether<br>Writes by one process not visible to others.</li>
+<li>Seperate file instances until Close()<br>Write visible after Close(), OS decides the merging</li>
+<li>Single instance of the file<br>Writes visible immediately to others<blockquote>
+<p>In all cases, fp is private.</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="NAMING"><a href="#NAMING" class="headerlink" title="NAMING"></a>NAMING</h4><p><strong>Naming primitives</strong><br>Naming &#x3D; mapping : human-redable string -&gt; uid<br>Directory(folder) &#x3D; collection of mappings(namings)</p>
+<p><strong>Directory Structure</strong></p>
+<ul>
+<li>Flat structure</li>
+<li>Two-level structure</li>
+<li>Hierarchical<br>Hierarchical directory structure can have different shapes(data structure)<br>EXP: tree, acyclic graph(acyclic graph enables short cut creation compared to tree)<blockquote>
+<p>Shortcut creation(in Linux): Hard Link &amp; Soft Link<br><strong>Hard Link</strong>: Creates a new mapping of a string to the existing UID<br><strong>Soft Link</strong>: Creats a new mapping of a string to the existing string<br><img src="/.com//4.png" alt="Def"><br><img src="/.com//5.png" alt="Difference"></p>
+</blockquote>
+</li>
+</ul>
+<h4 id="LINUX-PRIMITIVES"><a href="#LINUX-PRIMITIVES" class="headerlink" title="LINUX PRIMITIVES"></a>LINUX PRIMITIVES</h4><p>Collapses in a single interface of the previous primitives.</p>
+<blockquote>
+<p>UID is nerver visible at the user level!!</p>
+</blockquote>
+<h3 id="Disks"><a href="#Disks" class="headerlink" title="Disks"></a>Disks</h3><p><img src="/.com//6.png" alt="Structure of DISK"><br>Each platter has two surfaces, each surface has its own tracks; each track has its own sectors.<br>Cylinder: a logical grouping of tracks (same distance from the spindle)<br><img src="/.com//61.png" alt="Structure of DISK"><br><img src="/.com//62.png" alt="Structure of DISK"></p>
+<p><strong>Disk Interface</strong><br>Disk interface is accessible by sector only.</p>
+<hr>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+                <footer id="footer">
+    <div class="footer-wrap">
+        <div>
+            &copy;
+            2023 - 2023 Aubade_Blog
+            <span class="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;Terrance
+        </div>
+        <div>Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp; <a target="_blank" rel="noopener" href="https://github.com/argvchs/hexo-theme-particlex">ParticleX Theme</a></div>
+        
+    </div>
+</footer>
+
+            </div>
+            </transition>
+            <div id="showimg">
+                <img id="showimg-content">
+            </div>
+        </div>
+        <script src="/js/functions.js"></script>
+<script src="/js/particlex.js"></script>
+
+
+
+
+
+
+
+    </body>
+</html>
