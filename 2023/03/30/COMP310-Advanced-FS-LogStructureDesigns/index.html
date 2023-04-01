@@ -1,0 +1,296 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>COMP310-Advanced FS-LogStructureDesigns | Aubade_Blog</title>
+        <meta name="author" content="Terrance">
+        <meta name="description" content="Persisting will immortalizes freedom.">
+        <meta name="keywords" content="">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+        <link rel="icon" href="/images/OIP.jpg">
+        <script src="https://cdn.staticfile.org/vue/3.2.45/vue.global.prod.min.js"></script>
+        <script src="https://cdn.staticfile.org/highlight.js/11.7.0/highlight.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/11.7.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.2.1/css/all.min.css">
+        
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+        
+        
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.js"></script>
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/contrib/auto-render.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.css">
+        
+        
+        <link rel="stylesheet" href="/css/fonts.min.css">
+        <link rel="stylesheet" href="/css/particlex.css">
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="loading" style="height: 100vh; width: 100vw; left: 0; top: 0; position: fixed; display: flex; z-index: 2147483647; background: #fff; transition: opacity 0.3s ease-out; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; pointer-events: none">
+    <div style="width: 50vmin; height: 50vmin; margin: auto; padding: 50px; border-radius: 50%; display: flex; border: solid 10px #a3ddfb">
+        <div style="margin: auto; text-align: center">
+            <h2>LOADING</h2>
+            <p>加载过慢请开启缓存，浏览器默认开启</p>
+            <img src="/images/loading.gif" style="height: 50px; border-radius: 0">
+        </div>
+    </div>
+</div>
+
+        <div id="layout">
+            <transition name="into">
+            <div id="main" v-show="showpage" style="display: -not-none">
+                <nav id="menu">
+    <div class="desktop-menu">
+        <a class="title" href="/">
+            <span>AUBADE_BLOG</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </div>
+    <div :class="&quot;phone-menu &quot; + menushow" id="phone-menu">
+        <div class="curtain" @click="menushow = !menushow" v-show="menushow"></div>
+        <div class="title" @click="menushow = !menushow">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;AUBADE_BLOG</span>
+        </div>
+        <transition name="slide">
+        <div class="items" v-show="menushow">
+            
+            <a href="/">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-house fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                </div>
+            </a>
+            
+            <a href="/about">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-id-card fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                </div>
+            </a>
+            
+            <a href="/archives">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-box-archive fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                </div>
+            </a>
+            
+            <a href="/categories">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-bookmark fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                </div>
+            </a>
+            
+            <a href="/tags">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-tags fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                </div>
+            </a>
+            
+        </div>
+        </transition>
+    </div>
+</nav>
+
+                <div class="article">
+    <div>
+        <h1>COMP310-Advanced FS-LogStructureDesigns </h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/3/30
+        </span>
+        
+        <span class="category">
+            <a href="/categories/COMP310-Lecture-Notes/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                COMP310, Lecture Notes
+            </a>
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/COMP310-Lecture-Notes/" style="color: #ff7d73">COMP310, Lecture Notes</a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1 id="Advanced-FS-Log-Structured-Designs"><a href="#Advanced-FS-Log-Structured-Designs" class="headerlink" title="Advanced FS: Log-Structured Designs"></a>Advanced FS: Log-Structured Designs</h1><p><strong>Key Concepts</strong></p>
+<ul>
+<li>Log-Structure File System</li>
+<li>Log-Structure Key-Value Store</li>
+</ul>
+<p><strong>Reason</strong><br>Dealing with Crashes:<br>If the crash happens at the point in the middle of the data, thenn it will be a problem since <strong>the os doesn’t know which part is the new data and which part is the old data</strong>.<br>For <strong>write-behind</strong>, the crash may be a problem also even after finished since the file may not be transffered.</p>
+<h2 id="Handling-Crash"><a href="#Handling-Crash" class="headerlink" title="Handling Crash"></a>Handling Crash</h2><p><strong>Crash</strong>: a situation which the operation of the application errs, stopping its functionality.</p>
+<h3 id="Solution-Atomicity"><a href="#Solution-Atomicity" class="headerlink" title="Solution: Atomicity"></a>Solution: Atomicity</h3><h4 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h4><p><strong>Assumption</strong>:</p>
+<ol>
+<li>A single sector disk write is atomic<br><em>The assumption is true with very high probability(YES)</em><br><strong>Approach</strong>:</li>
+<li>Shadow Paging</li>
+<li>Intentions Log</li>
+</ol>
+<h5 id="Shadow-Paging"><a href="#Shadow-Paging" class="headerlink" title="Shadow Paging"></a>Shadow Paging</h5><ul>
+<li>Make sure both old copy and new copy are on the disk.</li>
+<li>Make atomic switch between the two &#x3D;&gt; By doing a <code>WriteSecor()</code><ul>
+<li>The atomic change must be done on inode since it’s smaller than sector, so we write in inode entry</li>
+</ul>
+</li>
+</ul>
+<p><strong>Step(Write Through)</strong>:<br><img src="/.com//00.png"><br><img src="/.com//0.png"><br>We first write new data blocks on the disk -&gt; after each writing, we update the inode in memory pointing to the new block -&gt; After the update is done in cache, we use atomic writesector() -&gt; Start garbage collection to clean the old data blocks</p>
+<p><strong>Step(Write Behind)</strong>:<br><img src="/.com//11.png"><br>The difference to write-through is that the data will not be directly write to the disk, instead, they will be write to the memory first then transfer to the disk. The block space will be allocated first for the disk before transferrence.<br><img src="/.com//12.png"><br>The step of transferring the block to the disk is not atomic.<br><em>(If failed, we may still recover the old version of the file)</em> &lt;- <em>Notice that the old blocks are not collected as the garbage yet</em><br><img src="/.com//14.png"><br>But for the <code>WriteSector()</code> instruction, it is atomic.<br><img src="/.com//13.png"><br>The old blocks will be cleaned finally.</p>
+<blockquote>
+<p>The OS will de-allocate the data blocks; if the OS crashes before de-allocation, FS will check.</p>
+</blockquote>
+<h5 id="Intentions-Log"><a href="#Intentions-Log" class="headerlink" title="Intentions Log"></a>Intentions Log</h5><p><strong>Log</strong>: Special area on disk which can only be appended instead of being overwritten</p>
+<p>Log itself acts as an intermediate media for transferrance between cache and disk.</p>
+<p><img src="/.com//21.png"><br><img src="/.com//22.png"><br><img src="/.com//23.png"><br><img src="/.com//24.png"><br><img src="/.com//25.png"><br>The log will still be checked if the old data is there.<br>The log will be garbage collected after all the instructions are finished.</p>
+<h5 id="Comparision-which-one-is-better"><a href="#Comparision-which-one-is-better" class="headerlink" title="Comparision: which one is better"></a>Comparision: which one is better</h5><p><strong>Criterion</strong></p>
+<ul>
+<li>The number of disk I&#x2F;O</li>
+<li>the number of random disk I&#x2F;O<br><img src="/.com//31.png"><br><em>It’s true theoratically that the shadow paging takes less operations; however, intention log works better.</em></li>
+</ul>
+<p><img src="/.com//32.png"><br>Log works better mainly because accession in log is sequential, and there’s less data fragmentation inside the log compared to the shadow paging. Shawdow paging requires jumping around facing accession, but log does not.</p>
+<h2 id="Log-structured-File-System-LFS"><a href="#Log-structured-File-System-LFS" class="headerlink" title="Log-structured File System(LFS)"></a>Log-structured File System(LFS)</h2><ul>
+<li>Alternative way of structuring file system</li>
+<li>Log &#x3D; append-only data structure(on disk)</li>
+</ul>
+<p> <strong>Idea</strong>: Use the disk purely sequentially</p>
+<ul>
+<li>Good for writing due to the sequential property</li>
+<li>Bad for reading since may read from spacing sectors</li>
+</ul>
+<h3 id="Strategy"><a href="#Strategy" class="headerlink" title="Strategy"></a>Strategy</h3><p><img src="/.com//41.png"></p>
+<h3 id="Data-Structures"><a href="#Data-Structures" class="headerlink" title="Data Structures"></a>Data Structures</h3><p>We store all the information including both data blocks and inodes to the log, which causes the problem of distinguishing between them. This need to be solved by using specific data structure.</p>
+<h4 id="Naive-Idea"><a href="#Naive-Idea" class="headerlink" title="Naive Idea:"></a>Naive Idea:</h4><ul>
+<li>Use current offset on disk instead of table index for uid</li>
+<li>When update inode, inode number changes</li>
+</ul>
+<p><img src="/.com//51.png"><br><img src="/.com//52.png"><br><em>Because the log can only append</em></p>
+<h4 id="Better-Idea"><a href="#Better-Idea" class="headerlink" title="Better Idea:"></a>Better Idea:</h4><ul>
+<li>Add a level of indirection<ul>
+<li>Map: file uid -&gt; inode location on disk</li>
+<li>Data structure is called Imap(Inode map)<br><img src="/.com//61.png"><br><img src="/.com//62.png"></li>
+</ul>
+</li>
+</ul>
+<h3 id="Recovery"><a href="#Recovery" class="headerlink" title="Recovery"></a>Recovery</h3><hr>
+<h2 id="Log-structure-key-value-stores"><a href="#Log-structure-key-value-stores" class="headerlink" title="Log-structure key value stores"></a>Log-structure key value stores</h2><p><strong>Key-Value Stores(KVs)</strong><br>Crucial component in systems with large amounts of diverse data, unstructured data.<br><img src="/.com//201.png"><br><strong>Log-structured key value stores</strong><br><img src="/.com//202.png"></p>
+<h3 id="LSM-KVs-Intervals"><a href="#LSM-KVs-Intervals" class="headerlink" title="LSM KVs Intervals"></a>LSM KVs Intervals</h3><p><img src="/.com//211.png"></p>
+<ul>
+<li>Commit log is a datastructure used to backup the info in Memory to the disk</li>
+<li>Commit log is optional and can be turned off(makes the transmission faster)</li>
+<li>Memory Sorted Buffer is any data structure preserving the order</li>
+</ul>
+<p><strong>LSM Writing</strong><br>Each time the client write something to the memory, if the commit log is on, OS will automatically transfer the info to the commit log.<br><img src="/.com//212.png"><br>When the buffer is full, we write the old one from the memory to disk sequentially, creating one sorted immutable files. -&gt; Then we empty the write buffer and the commit log.<br><img src="/.com//213.png"></p>
+<p><strong>LSM Reading</strong><br><img src="/.com//221.png"><br>The above hierarchy is not the actual separation, instead, they are logical hierarchy. </p>
+<ul>
+<li>L0 is reserved for flushing memory component to disk (Special since multiple version of the file can be in L0 at the same time)</li>
+<li>Starting from L1 (to Ln), each key in the key space can exist in only one of the files, which is guarantee by the key value store.</li>
+<li>The oldest version is in the lowest level, newest is in the highest level.</li>
+</ul>
+<blockquote>
+<p>L0 can contain many files with the same K, but L1 - Ln only contain one file with its own key</p>
+</blockquote>
+<blockquote>
+<p>one Key k can correspond to multiple files in different level and we only want the latest version.<br> Read from memory &#x3D;(not in memory)&#x3D;&gt; Read from Block cache &#x3D;(not in cache)&#x3D;&gt;Sequentially iterates through L0 to Ln<br><img src="/.com//222.png"><br>The log-structured key value stores is optimizaed for writing but not reading</p>
+</blockquote>
+<blockquote>
+<p>Each file contains a range of the key, so we can determine where does the key reside. In L0, the range of the file is not distinguished.</p>
+</blockquote>
+<p><strong>LSM Internal Operations</strong></p>
+<p><img src="/.com//230.png"></p>
+<h4 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h4><p><img src="/.com//231.png"><br><img src="/.com//241.png"><br>Ideal WA &#x3D; 1<br><img src="/.com//242.png"></p>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+                <footer id="footer">
+    <div class="footer-wrap">
+        <div>
+            &copy;
+            2023 - 2023 Aubade_Blog
+            <span class="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;Terrance
+        </div>
+        <div>Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp; <a target="_blank" rel="noopener" href="https://github.com/argvchs/hexo-theme-particlex">ParticleX Theme</a></div>
+        
+    </div>
+</footer>
+
+            </div>
+            </transition>
+            <div id="showimg">
+                <img id="showimg-content">
+            </div>
+        </div>
+        <script src="/js/functions.js"></script>
+<script src="/js/particlex.js"></script>
+
+
+
+
+
+
+
+    </body>
+</html>

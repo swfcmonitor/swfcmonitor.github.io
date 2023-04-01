@@ -1,0 +1,346 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Persistent Storage:Basic File System Implementation | Aubade_Blog</title>
+        <meta name="author" content="Terrance">
+        <meta name="description" content="Persisting will immortalizes freedom.">
+        <meta name="keywords" content="">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+        <link rel="icon" href="/images/OIP.jpg">
+        <script src="https://cdn.staticfile.org/vue/3.2.45/vue.global.prod.min.js"></script>
+        <script src="https://cdn.staticfile.org/highlight.js/11.7.0/highlight.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/11.7.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.2.1/css/all.min.css">
+        
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+        
+        
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.js"></script>
+        <script src="https://cdn.staticfile.org/KaTeX/0.16.4/contrib/auto-render.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.4/katex.min.css">
+        
+        
+        <link rel="stylesheet" href="/css/fonts.min.css">
+        <link rel="stylesheet" href="/css/particlex.css">
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="loading" style="height: 100vh; width: 100vw; left: 0; top: 0; position: fixed; display: flex; z-index: 2147483647; background: #fff; transition: opacity 0.3s ease-out; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; pointer-events: none">
+    <div style="width: 50vmin; height: 50vmin; margin: auto; padding: 50px; border-radius: 50%; display: flex; border: solid 10px #a3ddfb">
+        <div style="margin: auto; text-align: center">
+            <h2>LOADING</h2>
+            <p>加载过慢请开启缓存，浏览器默认开启</p>
+            <img src="/images/loading.gif" style="height: 50px; border-radius: 0">
+        </div>
+    </div>
+</div>
+
+        <div id="layout">
+            <transition name="into">
+            <div id="main" v-show="showpage" style="display: -not-none">
+                <nav id="menu">
+    <div class="desktop-menu">
+        <a class="title" href="/">
+            <span>AUBADE_BLOG</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </div>
+    <div :class="&quot;phone-menu &quot; + menushow" id="phone-menu">
+        <div class="curtain" @click="menushow = !menushow" v-show="menushow"></div>
+        <div class="title" @click="menushow = !menushow">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;AUBADE_BLOG</span>
+        </div>
+        <transition name="slide">
+        <div class="items" v-show="menushow">
+            
+            <a href="/">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-house fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                </div>
+            </a>
+            
+            <a href="/about">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-id-card fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                </div>
+            </a>
+            
+            <a href="/archives">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-box-archive fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                </div>
+            </a>
+            
+            <a href="/categories">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-bookmark fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                </div>
+            </a>
+            
+            <a href="/tags">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-tags fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                </div>
+            </a>
+            
+        </div>
+        </transition>
+    </div>
+</nav>
+
+                <div class="article">
+    <div>
+        <h1>Persistent Storage:Basic File System Implementation </h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/3/28
+        </span>
+        
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <p>Different file system can have different implementations, but they have essential common triats.</p>
+<p>File System: Creating a mapping between files(a sequence of uninterrupted untyped byte) and blocks on storage device. <em>(Block itself is another abstraction to the storage device)</em></p>
+<h3 id="File-System-Role"><a href="#File-System-Role" class="headerlink" title="File System Role"></a>File System Role</h3><p>The main task of file system is to translate : from <strong>user interface</strong> functions to <strong>disk interface</strong> fucntions.</p>
+<h2 id="File-System-Implementation"><a href="#File-System-Implementation" class="headerlink" title="File System Implementation"></a>File System Implementation</h2><p><strong>Key aspects</strong>:</p>
+<ul>
+<li>Data Structures : data structures on disk and data structures in memory</li>
+<li>Access methods</li>
+</ul>
+<blockquote>
+<p>Data structure must be on disk since disk is involatile. The metadata needed by the OS for mapping also must be on disk.</p>
+</blockquote>
+<h3 id="Disk-Data-Structures"><a href="#Disk-Data-Structures" class="headerlink" title="Disk Data Structures"></a>Disk Data Structures</h3><ul>
+<li>Data Region(actual information) -&gt; occupies most space in FS<ul>
+<li>User data</li>
+<li>free space</li>
+</ul>
+</li>
+<li>Meta data<ul>
+<li>Indicates the specific space used for user data and free space(Inode)</li>
+<li>house keeping stuff</li>
+</ul>
+</li>
+</ul>
+<p>We use metadata to track files, specifically, by the inode of the metadata.<br><img src="/.com//0.png" alt="example"></p>
+<p><strong>Structure Implementation</strong></p>
+<ul>
+<li>Free-list</li>
+<li>Bitmaps<ul>
+<li>Data structure where each bit indicates if corresponding object is free or in use</li>
+<li>1 &#x3D; in use ; 0 &#x3D; free </li>
+<li>we associate each block to a bit in bitmap</li>
+<li>We have inode bitmap and data bitmap<br><img src="/.com//1.png" alt="Bitmap Capacity"><br><img src="/.com//2.png" alt="Structure"><br>Superblock is the block used to track the metadata.</li>
+</ul>
+</li>
+</ul>
+<h3 id="Allocation-of-files-to-blocks"><a href="#Allocation-of-files-to-blocks" class="headerlink" title="Allocation of files to blocks"></a>Allocation of files to blocks</h3><p>Based on inode.<br><strong>Criteria for good strategy</strong></p>
+<ul>
+<li>Amount of fragmentation (external and internal)</li>
+<li>Ability to grow file over time</li>
+<li>Sequential access performance</li>
+<li>Random access performance</li>
+<li>Metadata overhead</li>
+</ul>
+<h4 id="Strategy"><a href="#Strategy" class="headerlink" title="Strategy:"></a>Strategy:</h4><p><strong>Contiguous allocation</strong></p>
+<ul>
+<li>Strategy: Allocate file data blocks contiguously on disk</li>
+<li>Metadata: Starting block + size of file</li>
+<li>Fragmentation: severe external frgamentation</li>
+<li>Growing: may be time intense</li>
+<li>Sequential access: good</li>
+<li>Random access: good</li>
+<li>Metadata overhead: low since just two number needs for matadata<br>The only case to use this is of the read-only.<br>Impractical for file system since it change files alot.<br><img src="/.com//30.png" alt="Contiguous allocation"></li>
+</ul>
+<p><strong>Extent-based allocation</strong><br>Trying to take advantage of the fragmentation but get rid of the holes.</p>
+<ul>
+<li>Stratgey: Allocate multiple contiguous extent per file.<br><img src="/.com//31.png" alt="Extent-based allocation"></li>
+</ul>
+<p><strong>Linked-List Allocation</strong><br>Each block likes a node in the linked list.</p>
+<ul>
+<li>Strategy: Allocate linked-list of blocks.</li>
+<li>Metadata: Location of first block of file, plus each block contains pointer to next block.<br><img src="/.com//32.png" alt="Linked-list allocation"></li>
+</ul>
+<p><strong>FAT(File-Allocation Tables)</strong><br>Exactly like the linked list with the difference that pointers are store in a different data structure.<br>Pointers are stored in FAT.<br><img src="/.com//33.png" alt="FAT allocation"><br>Since Table can be stored in cache, the accession time dies down.</p>
+<p><strong>Index Allocation</strong><br><img src="/.com//34.png" alt="Index allocation"></p>
+<p><strong>Index Allocation with Indirect Blocks</strong><br><img src="/.com//35.png" alt="IIB allocation"><br>Support Large files.<br><img src="/.com//37.png" alt="IIB allocation"><br>slower since an indirect node is leading in, 2 times slower. 4 more blocks.</p>
+<blockquote>
+<p>Directory stores as files.</p>
+</blockquote>
+<p>If the file size is larger than the size that inode can represent, then the open will fail.</p>
+<hr>
+<h3 id="Operations-of-data-stuctures-on-disk"><a href="#Operations-of-data-stuctures-on-disk" class="headerlink" title="Operations of data stuctures on disk"></a>Operations of data stuctures on disk</h3><p>Inefficient.</p>
+<p><img src="/.com//40.png" alt="Create /foo/bar"><br>If a new file is created, there’s no content in it, only inode of that file will be created.</p>
+<p><img src="/.com//41.png" alt="Open /foo/bar"></p>
+<p><img src="/.com//42.png" alt="Write /foo/bar"><br>Open it before write. The above graph omits the steps for openning the file.</p>
+<p><img src="/.com//43.png" alt="Read /foo/bar"><br>Open it before read. The above graph omits the steps for openning the file.</p>
+<p><img src="/.com//44.png" alt="Close /foo/bar"></p>
+<h3 id="Operations-of-data-stuctures-in-memory"><a href="#Operations-of-data-stuctures-in-memory" class="headerlink" title="Operations of data stuctures in memory"></a>Operations of data stuctures in memory</h3><h4 id="Cache"><a href="#Cache" class="headerlink" title="Cache"></a>Cache</h4><ul>
+<li>Finxed contiguous area of kernel memory.</li>
+<li>Size &#x3D; max number of chache blocks x block size</li>
+<li>A large chunck pf memeory of the machine</li>
+<li>In general, write behind is used</li>
+<li>For user data is OK</li>
+<li>For metadata, depends</li>
+</ul>
+<h4 id="Cache-Directory"><a href="#Cache-Directory" class="headerlink" title="Cache Directory"></a>Cache Directory</h4><p>index in the cache pointing to the disk data (usually hash table)<br><img src="/.com//45.png" alt="LRU"></p>
+<p><img src="/.com//46.png" alt="Cache Flush"></p>
+<h4 id="System-Wide-Active-File-Table"><a href="#System-Wide-Active-File-Table" class="headerlink" title="(System-Wide) Active File Table"></a>(System-Wide) Active File Table</h4><p>Indicates what files are in use in the system. </p>
+<ul>
+<li>One array for the entire system</li>
+<li>One entry per onpen file</li>
+<li>Each entry contains<ul>
+<li>file inode</li>
+<li>Additional Information<ul>
+<li>Reference count of number of file opens</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="Per-Process-Open-File-Table"><a href="#Per-Process-Open-File-Table" class="headerlink" title="(Per-Process) Open File Table"></a>(Per-Process) Open File Table</h4><ul>
+<li>One array per process</li>
+<li>One entry per file open of that process</li>
+<li>Indexed by file descriptor $fd$</li>
+<li>Each entry contains<ul>
+<li>Pointer to file inode in active file table</li>
+<li>File pointer $fp$</li>
+<li>Additional Information</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>Open File Table</strong> and <strong>Active File Table</strong> are put together in use.<br><strong>Open File Table</strong> is in the perspective of the process(PCB); <strong>Active File Table</strong> is in the perspective of the kernel.</p>
+</blockquote>
+<blockquote>
+<p><strong>UID</strong> is a component of the <strong>inode</strong>.</p>
+</blockquote>
+<blockquote>
+<p>The two tables are combined instead of singally use is because of the <strong>concurrency</strong>. We wish the process can access to the file concurrently.</p>
+</blockquote>
+<h3 id="Combination-of-Memory-Structure-with-Disk-Structure"><a href="#Combination-of-Memory-Structure-with-Disk-Structure" class="headerlink" title="Combination of Memory Structure with Disk Structure"></a>Combination of Memory Structure with Disk Structure</h3><p><img src="/.com//60.png" alt="CREATE"><br>Most of the times, data bitmap and inode bitmap are in chache,even some specific inode.<br>If the data(info) is already cached, there’s no need to read again.</p>
+<p><img src="/.com//61.png" alt="OPEN"></p>
+<p><img src="/.com//62.png" alt="WRITE"></p>
+<p><img src="/.com//63.png" alt="read"></p>
+<p><img src="/.com//64.png" alt="close"></p>
+<h3 id="Setting-up-the-FS"><a href="#Setting-up-the-FS" class="headerlink" title="Setting up the FS"></a>Setting up the FS</h3><ul>
+<li>By default, OS sees all storage devices as<ul>
+<li>Chunks of unallocated space</li>
+<li>which are unusable</li>
+</ul>
+</li>
+<li>Cannot start writing file to a blank drive</li>
+<li>Need to set up the FS first(Disk Parititioning)</li>
+</ul>
+<h4 id="Disk-Partition-Slicing"><a href="#Disk-Partition-Slicing" class="headerlink" title="Disk Partition(Slicing)"></a>Disk Partition(Slicing)</h4><ul>
+<li>FS needs a “container”(partition) on the storage device</li>
+<li>Partition allows different FS to be installed on same OS.</li>
+<li>Each partition appears to OS as a logical disk</li>
+<li>Disk stores partition info in partition table</li>
+<li>OS reads partition table before anyother parts of the disk</li>
+</ul>
+<h4 id="Mounting-a-FS"><a href="#Mounting-a-FS" class="headerlink" title="Mounting a FS"></a>Mounting a FS</h4><p>FS needs to be mounted for OS to acces its files.(Make OS know where the file system is).</p>
+<ul>
+<li>Mounting attaches FS to a directory</li>
+<li>Directory is called mount point</li>
+</ul>
+<p>All the file systems would be attached to a root file system.</p>
+<blockquote>
+<p>Mounting does not delete the files under the mount point; it only makes the file system can’t see the files.<br>If we unmount, the appearance goes to initial state.</p>
+</blockquote>
+<h4 id="Booting"><a href="#Booting" class="headerlink" title="Booting"></a>Booting</h4><ul>
+<li>BIOS lookes for clues on what it needs to start OS. BIOS checkes <strong>boot block</strong> first.</li>
+<li>A fixed location on disk (usually sector 0), containing boot loader and partition table.</li>
+<li>Read by BIOS on machine boot.</li>
+</ul>
+<h3 id="Alternative-File-Access-Method-Memory-Mapping"><a href="#Alternative-File-Access-Method-Memory-Mapping" class="headerlink" title="Alternative File Access Method: Memory Mapping"></a>Alternative File Access Method: Memory Mapping</h3><p>Memory mapping: a way to not use the file system.</p>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+                <footer id="footer">
+    <div class="footer-wrap">
+        <div>
+            &copy;
+            2023 - 2023 Aubade_Blog
+            <span class="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;Terrance
+        </div>
+        <div>Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp; <a target="_blank" rel="noopener" href="https://github.com/argvchs/hexo-theme-particlex">ParticleX Theme</a></div>
+        
+    </div>
+</footer>
+
+            </div>
+            </transition>
+            <div id="showimg">
+                <img id="showimg-content">
+            </div>
+        </div>
+        <script src="/js/functions.js"></script>
+<script src="/js/particlex.js"></script>
+
+
+
+
+
+
+
+    </body>
+</html>
