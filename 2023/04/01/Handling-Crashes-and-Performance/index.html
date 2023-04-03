@@ -159,12 +159,12 @@
             
             <span class="tag">
                 
-                <a href="/tags/COMP310/" style="color: #03a9f4">COMP310</a>
+                <a href="/tags/COMP310/" style="color: #ff7d73">COMP310</a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/Lecture-Notes/" style="color: #ffa2c4">Lecture Notes</a>
+                <a href="/tags/Lecture-Notes/" style="color: #03a9f4">Lecture Notes</a>
             </span>
             
         </span>
@@ -223,6 +223,32 @@
 <p>RAID-4 requires access to parity disk for each write, this cause bottleneck in write-heavy workload.<br>Parallelism in data disks puts time lag on parity disk<br>The issue is called  <strong>small-write problem</strong></p>
 </blockquote>
 <p><strong>RAID-5 : Distributed Parity</strong><br><img src="/.com//43.png"></p>
+<hr>
+<h2 id="Distributed-File-Systems"><a href="#Distributed-File-Systems" class="headerlink" title="Distributed File Systems"></a>Distributed File Systems</h2><h3 id="Distributed-System"><a href="#Distributed-System" class="headerlink" title="Distributed System"></a>Distributed System</h3><p>A distributed system is one where a machine I’ve never heard of can cause my program to fail.<br><strong>Definition</strong>: More than 1 machine working together to solve a problem.<br><strong>Advantage</strong>: </p>
+<ul>
+<li>More computing power</li>
+<li>More storage capacity</li>
+<li>Fault Tolerance</li>
+<li>Data sharing</li>
+<li><img src="/.com//50.png"><br>Availability: Able to access the machine though others crack down<br>Fault-tolerance: Fault procession is incorporated as a functionality<br>Scalability: More machine, better performance<br>Transperancy: No realization to distribution</li>
+</ul>
+<h4 id="Type"><a href="#Type" class="headerlink" title="Type"></a>Type</h4><ul>
+<li>Clien&#x2F;Server Model</li>
+<li>Peer-to-peer Model<br><img src="/.com//51.png"><br><img src="/.com//52.png"></li>
+</ul>
+<h3 id="Distributed-File-System"><a href="#Distributed-File-System" class="headerlink" title="Distributed File System"></a>Distributed File System</h3><p>File systems are great use for distributed systems.</p>
+<ul>
+<li>Local FS: Processes on same machine access shared files</li>
+<li>Network FS: Process on different machines access shared files in same way<br><img src="/.com//61.png"></li>
+</ul>
+<h4 id="Network-File-System-NFS"><a href="#Network-File-System-NFS" class="headerlink" title="Network File System (NFS)"></a>Network File System (NFS)</h4><p><img src="/.com//62.png"><br><img src="/.com//63.png"><br>The client must <strong>mount</strong> a seperate file system named <strong>NFS</strong> to access the file stored in the file server. The accession must go through NFS by Remote Procedural Call.<br><strong>Problems</strong><br><img src="/.com//64.png"><br><strong>Solution for handling crashes</strong></p>
+<ul>
+<li>Stateless protocol with</li>
+<li>Idempotent operations : The operations which can be done many times without chhanging info</li>
+</ul>
+<p><img src="/.com//65.png"><br>The issue of this is thre path may depends on the file storing structure. Which means each time the same access to the same path does not always be the same.<br><img src="/.com//66.png"><br><img src="/.com//67.png"></p>
+<p>We can retry Read for many times, but not for write since multiple modification may deviate from the purpose, thus we introduce the idempotent operations.<br><img src="/.com//68.png"></p>
+<p><img src="/.com//69.png"><br>Use offset to rewrite particular part.<br><img src="/.com//70.png"><br><strong>Solution for slowness</strong><br><img src="/.com//71.png"></p>
 
     </div>
     
